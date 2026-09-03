@@ -4,25 +4,26 @@ import io, os
 import shutil
 OUT = "public"; os.makedirs(OUT, exist_ok=True)
 shutil.copytree("fonts", os.path.join(OUT, "fonts"), dirs_exist_ok=True)
-FONT_CSS = '@font-face{font-family:"Instrument Serif";font-style:normal;font-weight:400;font-display:swap;src:url(/fonts/InstrumentSerif-latin.woff2) format("woff2");unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD}@font-face{font-family:"Instrument Serif";font-style:italic;font-weight:400;font-display:swap;src:url(/fonts/InstrumentSerif-italic-latin.woff2) format("woff2")}@font-face{font-family:"JetBrains Mono";font-style:normal;font-weight:400 600;font-display:swap;src:url(/fonts/JetBrainsMono-latin.woff2) format("woff2")}@font-face{font-family:"IBM Plex Sans";font-style:normal;font-weight:400 600;font-display:swap;src:url(/fonts/IBMPlexSans-latin.woff2) format("woff2")}'
+FONT_CSS = '@font-face{font-family:"Sora";font-style:normal;font-weight:400 700;font-display:swap;src:url(/fonts/Sora-latin.woff2) format("woff2")}' + '@font-face{font-family:"Instrument Serif";font-style:normal;font-weight:400;font-display:swap;src:url(/fonts/InstrumentSerif-latin.woff2) format("woff2");unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD}@font-face{font-family:"Instrument Serif";font-style:italic;font-weight:400;font-display:swap;src:url(/fonts/InstrumentSerif-italic-latin.woff2) format("woff2")}@font-face{font-family:"JetBrains Mono";font-style:normal;font-weight:400 600;font-display:swap;src:url(/fonts/JetBrainsMono-latin.woff2) format("woff2")}@font-face{font-family:"IBM Plex Sans";font-style:normal;font-weight:400 600;font-display:swap;src:url(/fonts/IBMPlexSans-latin.woff2) format("woff2")}'
 CSS = """
 :root{--ground:#0B0F14;--surface:#10161E;--hair:#1F2A36;--hair2:#2A3644;--ink:#E8EEF3;--ink2:#A3B1BE;--ink3:#64768A;--accent:#4FD1D9;--robo:#E0AE4A}
-*{box-sizing:border-box}body{margin:0;background:var(--ground);color:var(--ink);font-family:"IBM Plex Sans","PingFang SC","Noto Sans SC",system-ui,sans-serif;font-size:15px;line-height:1.65;-webkit-font-smoothing:antialiased}
+.notice{border:1px solid rgba(79,209,217,.35);background:rgba(79,209,217,.08);border-radius:12px;padding:14px 18px;color:var(--ink2);font-size:14px;margin-top:16px;line-height:1.7}.notice a{color:var(--accent)}
+*{box-sizing:border-box}body{margin:0;background:var(--ground);color:var(--ink);font-family:"Sora","IBM Plex Sans","PingFang SC","Noto Sans SC",system-ui,sans-serif;font-size:15px;line-height:1.65;-webkit-font-smoothing:antialiased}
 a{color:var(--accent);text-decoration:none}a:hover{color:#8AE3E8}h1,h2,h3{margin:0;font-weight:400}
-.serif{font-family:"Instrument Serif","Noto Serif SC","Songti SC",Georgia,serif}.mono{font-family:"JetBrains Mono","IBM Plex Mono",ui-monospace,Menlo,monospace}
+.serif{font-family:"Sora","PingFang SC",sans-serif;font-weight:700}.mono{font-family:"JetBrains Mono","IBM Plex Mono",ui-monospace,Menlo,monospace}
 .wrap{max-width:1040px;margin:0 auto;padding:0 32px}
 header{border-bottom:1px solid var(--hair)}.bar{display:flex;align-items:center;gap:26px;padding:22px 0}.bar nav{display:flex;gap:22px;font-size:14px;margin-left:auto}.bar nav a{color:var(--ink2)}.bar nav a.on{color:var(--ink);border-bottom:1px solid var(--accent);padding-bottom:2px}
-.brand{display:flex;align-items:center;gap:12px;color:var(--ink)}.brand h1{font-family:"Instrument Serif","Noto Serif SC",serif;font-size:22px;line-height:1}.brand .sub{font-family:"JetBrains Mono",monospace;font-size:10px;letter-spacing:.22em;color:var(--ink3);text-transform:uppercase;margin-top:3px}
+.brand{display:flex;align-items:center;gap:12px;color:var(--ink)}.brand h1{font-family:"Sora","PingFang SC","Noto Sans SC",sans-serif;font-weight:700;font-size:22px;line-height:1}.brand .sub{font-family:"JetBrains Mono",monospace;font-size:10px;letter-spacing:.22em;color:var(--ink3);text-transform:uppercase;margin-top:3px}
 main{padding:56px 0 80px}.eyebrow{font-family:"JetBrains Mono",monospace;font-size:11px;letter-spacing:.22em;color:var(--accent);text-transform:uppercase}
-h2.big{font-family:"Instrument Serif","Noto Serif SC",serif;font-size:52px;line-height:1.06;letter-spacing:-.01em;text-wrap:balance;margin:14px 0 0}h2.big em{color:var(--accent)}
+h2.big{font-family:"Sora","PingFang SC","Noto Sans SC",sans-serif;font-weight:700;font-size:52px;line-height:1.06;letter-spacing:-.01em;text-wrap:balance;margin:14px 0 0}h2.big em{color:var(--accent)}
 p.lead{font-size:17px;color:var(--ink2);max-width:640px;margin:18px 0 0}
 .cards{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px;margin-top:44px}
 .card{background:var(--surface);border:1px solid var(--hair);border-radius:16px;padding:26px 28px;display:flex;flex-direction:column;gap:10px;color:var(--ink)}
-.card .k{font-family:"JetBrains Mono",monospace;font-size:11px;letter-spacing:.2em;text-transform:uppercase}.card h3{font-family:"Instrument Serif","Noto Serif SC",serif;font-size:28px}.card p{margin:0;color:var(--ink2);font-size:14px}
+.card .k{font-family:"JetBrains Mono",monospace;font-size:11px;letter-spacing:.2em;text-transform:uppercase}.card h3{font-family:"Sora","PingFang SC","Noto Sans SC",sans-serif;font-weight:700;font-size:28px}.card p{margin:0;color:var(--ink2);font-size:14px}
 .card .cta{margin-top:auto;display:inline-flex;align-items:center;gap:8px;font-size:14px;font-weight:600}
 .card.compute .k,.card.compute .cta{color:var(--accent)}.card.robo .k,.card.robo .cta{color:var(--robo)}
 .card.soon{opacity:.85}.badge{display:inline-block;font-family:"JetBrains Mono",monospace;font-size:10.5px;padding:2px 8px;border-radius:999px;border:1px solid var(--hair2);color:var(--ink3);margin-left:8px;vertical-align:middle}
-.sec{margin-top:56px}.sec h2{font-family:"Instrument Serif","Noto Serif SC",serif;font-size:30px;margin-bottom:14px}
+.sec{margin-top:56px}.sec h2{font-family:"Sora","PingFang SC","Noto Sans SC",sans-serif;font-weight:700;font-size:30px;margin-bottom:14px}
 ol.law{counter-reset:c;list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:14px}ol.law li{display:grid;grid-template-columns:44px minmax(0,1fr);gap:14px;padding:18px 20px;background:var(--surface);border:1px solid var(--hair);border-radius:12px}ol.law li::before{counter-increment:c;content:counter(c,decimal-leading-zero);font-family:"JetBrains Mono",monospace;color:var(--accent);font-size:13px;padding-top:3px}ol.law b{display:block;font-size:16px;margin-bottom:4px;font-weight:500}ol.law span{color:var(--ink2);font-size:14px}
 .two{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}.box{background:var(--surface);border:1px solid var(--hair);border-radius:12px;padding:18px 20px}.box h3{font-size:16px;margin-bottom:8px;font-weight:500}.box.ok{border-color:rgba(76,195,138,.4)}.box.no{border-color:rgba(228,97,76,.4)}.box ul{margin:0;padding-left:18px;color:var(--ink2);font-size:14px}
 .prose{max-width:720px;color:var(--ink2)}.prose h3{color:var(--ink);font-size:18px;margin:26px 0 8px;font-weight:500}.prose p{margin:10px 0}
@@ -31,13 +32,13 @@ footer{border-top:1px solid var(--hair)}footer .wrap{display:flex;flex-wrap:wrap
 @media(max-width:800px){.cards,.two{grid-template-columns:1fr}h2.big{font-size:38px}.bar nav{display:none}}
 """
 LOGO='<svg width="30" height="30" viewBox="0 0 40 40" aria-hidden="true"><circle cx="20" cy="20" r="17.5" fill="none" stroke="#2A3644" stroke-width="1.2"/><path d="M20 5v4M20 31v4M5 20h4M31 20h4" stroke="#64768A" stroke-width="1.2" stroke-linecap="round"/><path d="M20 9 L24.5 20 L20 31 Z" fill="#4FD1D9"/><path d="M20 9 L15.5 20 L20 31 Z" fill="#2A3644"/><circle cx="20" cy="20" r="2.2" fill="#0B0F14" stroke="#4FD1D9" stroke-width="1.4"/></svg>'
-NAV=[("index.html","首页"),("constitution.html","中立宪法"),("about.html","关于"),("subscribe.html","订阅")]
+NAV=[("/","首页"),("/constitution","中立宪法"),("/about","关于"),("/subscribe","订阅")]
 def page(fn, title, desc, body, active):
-    nav="".join('<a href="%s"%s>%s</a>' % (h, ' class="on"' if h==active else "", t) for h,t in NAV)
-    html=f'''<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>{title}</title><meta name="description" content="{desc}"><meta property="og:site_name" content="Sinan Lab"><meta property="og:title" content="{title}"><meta property="og:description" content="{desc}"><link rel="canonical" href="https://sinanlab.com/{'' if fn=='index.html' else fn}"><link rel="icon" href="/favicon.svg" type="image/svg+xml"><meta name="theme-color" content="#0B0F14"><style>{FONT_CSS}</style><style>{CSS}</style></head><body>
+    nav="".join('<a href="%s"%s>%s</a>' % (h, ' class="on"' if h.strip("/")==active.replace(".html","").strip("/") else "", t) for h,t in NAV)
+    html=f'''<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>{title}</title><meta name="description" content="{desc}"><meta property="og:site_name" content="Sinan Lab"><meta property="og:title" content="{title}"><meta property="og:description" content="{desc}"><link rel="canonical" href="https://sinanlab.com/{'' if fn=='index.html' else fn.replace('.html','')}"><link rel="icon" href="/favicon.svg" type="image/svg+xml"><meta name="theme-color" content="#0B0F14"><style>{FONT_CSS}</style><style>{CSS}</style></head><body>
 <header><div class="wrap bar"><a class="brand" href="/">{LOGO}<div><h1>Sinan Lab</h1><div class="sub">司南实验室 · AI 基础设施的中立测量者</div></div></a><nav>{nav}<a href="https://compute.sinanlab.com">Sinan Compute</a><a href="https://robo.sinanlab.com">Sinan Robo</a></nav></div></header>
 <main><div class="wrap">{body}</div></main>
-<footer><div class="wrap"><span>© 2026 Sinan Lab · 司南实验室</span><a href="/constitution.html">中立宪法</a><a href="/disclosure.html">返佣披露</a><a href="/privacy.html">隐私政策</a><a href="/disclaimer.html">免责声明</a><a href="mailto:hello@sinanlab.com">hello@sinanlab.com</a><span style="margin-left:auto">每个数字可追溯来源 · 不收任何被测渠道的钱</span></div></footer></body></html>'''
+<footer><div class="wrap"><span>© 2026 Sinan Lab · 司南实验室</span><a href="/constitution">中立宪法</a><a href="/disclosure">返佣披露</a><a href="/privacy">隐私政策</a><a href="/disclaimer">免责声明</a><a href="mailto:hello@sinanlab.com">hello@sinanlab.com</a><span style="margin-left:auto">每个数字可追溯来源 · 不收任何被测渠道的钱</span></div></footer></body></html>'''
     io.open(os.path.join(OUT,fn),"w",encoding="utf-8").write(html)
 
 page("index.html","Sinan Lab · 司南实验室 —— AI 基础设施的中立测量者","司南实验室：对 GPU 租赁、模型 API 渠道与具身智能模型做中立测量。每个数字可追溯来源，不收任何被测渠道的钱。",f'''
@@ -55,7 +56,7 @@ page("index.html","Sinan Lab · 司南实验室 —— AI 基础设施的中立�
 <li><b>每个数字带证据</b><span>来源 URL、抓取时间、原始快照哈希，永不覆盖。算错了公开更正，原记录保留。</span></li>
 <li><b>只说算术，不说人</b><span>"在无补贴假设下数学上不可持续"是算术；"假模型""诈骗"不是。指控性词汇在发布管线里被拦下，不靠自觉。</span></li>
 <li><b>方法论与收入占比公开</b><span>方法版本永久公开；一旦有收入，每季度公开来源占比。</span></li>
-</ol><p style="margin-top:14px;font-size:14px;color:var(--ink3)">全文见 <a href="/constitution.html">中立宪法</a>。</p></section>
+</ol><p style="margin-top:14px;font-size:14px;color:var(--ink3)">全文见 <a href="/constitution">中立宪法</a>。</p></section>
 ''', "index.html")
 
 page("constitution.html","中立宪法 · Sinan Lab","司南实验室的中立宪法与措辞宪法全文：不收被测者的钱、排名不含商业变量、每个数字带证据、只说算术不说人、方法与收入公开。",'''
@@ -86,7 +87,7 @@ page("about.html","关于 · Sinan Lab","司南实验室是一个一人加 AI �
 page("subscribe.html","订阅 · Sinan Lab","订阅司南实验室：算力价格周报与机脑行情。邮箱或 RSS，不强制注册，随时一键退订。",'''
 <div class="eyebrow">订阅</div><h2 class="big">价格变了、新站出现了、测量异常了——<em>我们告诉你。</em></h2>
 <p class="lead">每周一封。邮箱单独存放、不与任何数据关联、随时一键退订。</p>
-<form class="sub" action="https://buttondown.com/api/emails/embed-subscribe/sinanlab" method="post" target="_blank"><input type="email" name="email" placeholder="you@company.com" required aria-label="邮箱"><button type="submit">订阅周报</button></form>
+<div class="notice">邮件订阅服务正在接入，接通前先发邮件到 <a href="mailto:hello@sinanlab.com?subject=subscribe">hello@sinanlab.com</a> 写“订阅”，我们手动加你。不会有营销邮件，只发有变化的。</div>
 <p style="margin-top:10px;font-size:13px;color:var(--ink3)">订阅服务接入中：表单地址上线前会替换为正式地址。也可以用 RSS：<span class="mono">https://compute.sinanlab.com/feed.xml</span>（即将开通）。</p>
 <section class="sec"><h2>两栏内容</h2><div class="two"><div class="box"><h3>算力价格周报 · Sinan Compute</h3><ul><li>本周官方与公开市场价变动</li><li>新收录渠道与消失的渠道</li><li>实付价异常与一致性测量摘要</li></ul></div><div class="box"><h3>机脑行情 · Sinan Robo</h3><ul><li>开源 VLA 模型新发布与许可证变化</li><li>模型 × 本体适配矩阵更新</li><li>硬件延迟与推理成本实测</li></ul></div></div></section>
 ''', "subscribe.html")
@@ -98,7 +99,9 @@ for fn,title,body in [
 ]:
     page(fn,title,"司南实验室 · "+title.split(" ·")[0],body,"")
 io.open(os.path.join(OUT,"robots.txt"),"w").write("User-agent: *\nAllow: /\nSitemap: https://sinanlab.com/sitemap.xml\n")
-io.open(os.path.join(OUT,"sitemap.xml"),"w").write('<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n'+"".join("  <url><loc>https://sinanlab.com/%s</loc></url>\n" % ("" if f=="index.html" else f) for f in ["index.html","constitution.html","about.html","subscribe.html","disclosure.html","privacy.html","disclaimer.html"])+"</urlset>\n")
+io.open(os.path.join(OUT,"sitemap.xml"),"w").write('<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n'+"".join("  <url><loc>https://sinanlab.com/%s</loc></url>\n" % ("" if f=="index.html" else f.replace(".html","")) for f in ["index.html","constitution.html","about.html","subscribe.html","disclosure.html","privacy.html","disclaimer.html"])+"</urlset>\n")
 io.open(os.path.join(OUT,"favicon.svg"),"w").write('<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 40 40"><rect width="40" height="40" rx="8" fill="#0B0F14"/><circle cx="20" cy="20" r="14" fill="none" stroke="#2A3644" stroke-width="1.5"/><path d="M20 9 L24.5 20 L20 31 Z" fill="#4FD1D9"/><path d="M20 9 L15.5 20 L20 31 Z" fill="#2A3644"/><circle cx="20" cy="20" r="2.2" fill="#0B0F14" stroke="#4FD1D9" stroke-width="1.4"/></svg>')
 io.open(os.path.join(OUT,"_redirects"),"w").write("https://www.sinanlab.com/* https://sinanlab.com/:splat 301\n")
 print("母站生成：", sorted(os.listdir(OUT)))
+
+page("404.html","没有这个页面 · Sinan Lab","页面不存在",'<div class="eyebrow">404</div><h2 class="big">没有这个页面。</h2><p style="color:var(--ink2);margin-top:14px">地址可能拼错了，或者这一页已经搬走。<a href="/" style="color:var(--accent)">回首页</a> · <a href="https://compute.sinanlab.com" style="color:var(--accent)">去 Sinan Compute</a></p>',"")
