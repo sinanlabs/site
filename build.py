@@ -1,7 +1,10 @@
 # -*- coding: utf-8 -*-
 """sinanlab.com 母站：五页静态 HTML。无框架，python3 build.py 生成到 public/。"""
 import io, os
+import shutil
 OUT = "public"; os.makedirs(OUT, exist_ok=True)
+shutil.copytree("fonts", os.path.join(OUT, "fonts"), dirs_exist_ok=True)
+FONT_CSS = '@font-face{font-family:"Instrument Serif";font-style:normal;font-weight:400;font-display:swap;src:url(/fonts/InstrumentSerif-latin.woff2) format("woff2");unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD}@font-face{font-family:"Instrument Serif";font-style:italic;font-weight:400;font-display:swap;src:url(/fonts/InstrumentSerif-italic-latin.woff2) format("woff2")}@font-face{font-family:"JetBrains Mono";font-style:normal;font-weight:400 600;font-display:swap;src:url(/fonts/JetBrainsMono-latin.woff2) format("woff2")}@font-face{font-family:"IBM Plex Sans";font-style:normal;font-weight:400 600;font-display:swap;src:url(/fonts/IBMPlexSans-latin.woff2) format("woff2")}'
 CSS = """
 :root{--ground:#0B0F14;--surface:#10161E;--hair:#1F2A36;--hair2:#2A3644;--ink:#E8EEF3;--ink2:#A3B1BE;--ink3:#64768A;--accent:#4FD1D9;--robo:#E0AE4A}
 *{box-sizing:border-box}body{margin:0;background:var(--ground);color:var(--ink);font-family:"IBM Plex Sans","PingFang SC","Noto Sans SC",system-ui,sans-serif;font-size:15px;line-height:1.65;-webkit-font-smoothing:antialiased}
@@ -31,7 +34,7 @@ LOGO='<svg width="30" height="30" viewBox="0 0 40 40" aria-hidden="true"><circle
 NAV=[("index.html","首页"),("constitution.html","中立宪法"),("about.html","关于"),("subscribe.html","订阅")]
 def page(fn, title, desc, body, active):
     nav="".join('<a href="%s"%s>%s</a>' % (h, ' class="on"' if h==active else "", t) for h,t in NAV)
-    html=f'''<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>{title}</title><meta name="description" content="{desc}"><meta property="og:site_name" content="Sinan Lab"><meta property="og:title" content="{title}"><meta property="og:description" content="{desc}"><link rel="canonical" href="https://sinanlab.com/{'' if fn=='index.html' else fn}"><link rel="icon" href="/favicon.svg" type="image/svg+xml"><meta name="theme-color" content="#0B0F14"><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600&family=Noto+Serif+SC:wght@600;700&display=swap"><style>{CSS}</style></head><body>
+    html=f'''<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>{title}</title><meta name="description" content="{desc}"><meta property="og:site_name" content="Sinan Lab"><meta property="og:title" content="{title}"><meta property="og:description" content="{desc}"><link rel="canonical" href="https://sinanlab.com/{'' if fn=='index.html' else fn}"><link rel="icon" href="/favicon.svg" type="image/svg+xml"><meta name="theme-color" content="#0B0F14"><style>{FONT_CSS}</style><style>{CSS}</style></head><body>
 <header><div class="wrap bar"><a class="brand" href="/">{LOGO}<div><h1>Sinan Lab</h1><div class="sub">司南实验室 · AI 基础设施的中立测量者</div></div></a><nav>{nav}<a href="https://compute.sinanlab.com">Sinan Compute</a><a href="https://robo.sinanlab.com">Sinan Robo</a></nav></div></header>
 <main><div class="wrap">{body}</div></main>
 <footer><div class="wrap"><span>© 2026 Sinan Lab · 司南实验室</span><a href="/constitution.html">中立宪法</a><a href="/disclosure.html">返佣披露</a><a href="/privacy.html">隐私政策</a><a href="/disclaimer.html">免责声明</a><a href="mailto:hello@sinanlab.com">hello@sinanlab.com</a><span style="margin-left:auto">每个数字可追溯来源 · 不收任何被测渠道的钱</span></div></footer></body></html>'''
