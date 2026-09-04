@@ -1,107 +1,231 @@
 # -*- coding: utf-8 -*-
-"""sinanlab.com 母站：五页静态 HTML。无框架，python3 build.py 生成到 public/。"""
-import io, os
-import shutil
-OUT = "public"; os.makedirs(OUT, exist_ok=True)
-shutil.copytree("fonts", os.path.join(OUT, "fonts"), dirs_exist_ok=True)
-FONT_CSS = '@font-face{font-family:"Sora";font-style:normal;font-weight:400 700;font-display:swap;src:url(/fonts/Sora-latin.woff2) format("woff2")}' + '@font-face{font-family:"Instrument Serif";font-style:normal;font-weight:400;font-display:swap;src:url(/fonts/InstrumentSerif-latin.woff2) format("woff2");unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD}@font-face{font-family:"Instrument Serif";font-style:italic;font-weight:400;font-display:swap;src:url(/fonts/InstrumentSerif-italic-latin.woff2) format("woff2")}@font-face{font-family:"JetBrains Mono";font-style:normal;font-weight:400 600;font-display:swap;src:url(/fonts/JetBrainsMono-latin.woff2) format("woff2")}@font-face{font-family:"IBM Plex Sans";font-style:normal;font-weight:400 600;font-display:swap;src:url(/fonts/IBMPlexSans-latin.woff2) format("woff2")}'
-CSS = """
-:root{--ground:#0B0F14;--surface:#10161E;--hair:#1F2A36;--hair2:#2A3644;--ink:#E8EEF3;--ink2:#A3B1BE;--ink3:#64768A;--accent:#4FD1D9;--robo:#E0AE4A}
-.notice{border:1px solid rgba(79,209,217,.35);background:rgba(79,209,217,.08);border-radius:12px;padding:14px 18px;color:var(--ink2);font-size:14px;margin-top:16px;line-height:1.7}.notice a{color:var(--accent)}
-*{box-sizing:border-box}body{margin:0;background:var(--ground);color:var(--ink);font-family:"Sora","IBM Plex Sans","PingFang SC","Noto Sans SC",system-ui,sans-serif;font-size:15px;line-height:1.65;-webkit-font-smoothing:antialiased}
-a{color:var(--accent);text-decoration:none}a:hover{color:#8AE3E8}h1,h2,h3{margin:0;font-weight:400}
-.serif{font-family:"Sora","PingFang SC",sans-serif;font-weight:700}.mono{font-family:"JetBrains Mono","IBM Plex Mono",ui-monospace,Menlo,monospace}
-.wrap{max-width:1040px;margin:0 auto;padding:0 32px}
-header{border-bottom:1px solid var(--hair)}.bar{display:flex;align-items:center;gap:26px;padding:22px 0}.bar nav{display:flex;gap:22px;font-size:14px;margin-left:auto}.bar nav a{color:var(--ink2)}.bar nav a.on{color:var(--ink);border-bottom:1px solid var(--accent);padding-bottom:2px}
-.brand{display:flex;align-items:center;gap:12px;color:var(--ink)}.brand h1{font-family:"Sora","PingFang SC","Noto Sans SC",sans-serif;font-weight:700;font-size:22px;line-height:1}.brand .sub{font-family:"JetBrains Mono",monospace;font-size:10px;letter-spacing:.22em;color:var(--ink3);text-transform:uppercase;margin-top:3px}
-main{padding:56px 0 80px}.eyebrow{font-family:"JetBrains Mono",monospace;font-size:11px;letter-spacing:.22em;color:var(--accent);text-transform:uppercase}
-h2.big{font-family:"Sora","PingFang SC","Noto Sans SC",sans-serif;font-weight:700;font-size:52px;line-height:1.06;letter-spacing:-.01em;text-wrap:balance;margin:14px 0 0}h2.big em{color:var(--accent)}
-p.lead{font-size:17px;color:var(--ink2);max-width:640px;margin:18px 0 0}
-.cards{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px;margin-top:44px}
-.card{background:var(--surface);border:1px solid var(--hair);border-radius:16px;padding:26px 28px;display:flex;flex-direction:column;gap:10px;color:var(--ink)}
-.card .k{font-family:"JetBrains Mono",monospace;font-size:11px;letter-spacing:.2em;text-transform:uppercase}.card h3{font-family:"Sora","PingFang SC","Noto Sans SC",sans-serif;font-weight:700;font-size:28px}.card p{margin:0;color:var(--ink2);font-size:14px}
-.card .cta{margin-top:auto;display:inline-flex;align-items:center;gap:8px;font-size:14px;font-weight:600}
-.card.compute .k,.card.compute .cta{color:var(--accent)}.card.robo .k,.card.robo .cta{color:var(--robo)}
-.card.soon{opacity:.85}.badge{display:inline-block;font-family:"JetBrains Mono",monospace;font-size:10.5px;padding:2px 8px;border-radius:999px;border:1px solid var(--hair2);color:var(--ink3);margin-left:8px;vertical-align:middle}
-.sec{margin-top:56px}.sec h2{font-family:"Sora","PingFang SC","Noto Sans SC",sans-serif;font-weight:700;font-size:30px;margin-bottom:14px}
-ol.law{counter-reset:c;list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:14px}ol.law li{display:grid;grid-template-columns:44px minmax(0,1fr);gap:14px;padding:18px 20px;background:var(--surface);border:1px solid var(--hair);border-radius:12px}ol.law li::before{counter-increment:c;content:counter(c,decimal-leading-zero);font-family:"JetBrains Mono",monospace;color:var(--accent);font-size:13px;padding-top:3px}ol.law b{display:block;font-size:16px;margin-bottom:4px;font-weight:500}ol.law span{color:var(--ink2);font-size:14px}
-.two{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}.box{background:var(--surface);border:1px solid var(--hair);border-radius:12px;padding:18px 20px}.box h3{font-size:16px;margin-bottom:8px;font-weight:500}.box.ok{border-color:rgba(76,195,138,.4)}.box.no{border-color:rgba(228,97,76,.4)}.box ul{margin:0;padding-left:18px;color:var(--ink2);font-size:14px}
-.prose{max-width:720px;color:var(--ink2)}.prose h3{color:var(--ink);font-size:18px;margin:26px 0 8px;font-weight:500}.prose p{margin:10px 0}
-form.sub{display:flex;gap:10px;margin-top:18px;max-width:520px}form.sub input{flex:1;height:44px;border:1px solid var(--hair2);border-radius:9px;background:var(--surface);color:var(--ink);padding:0 14px;font:inherit}form.sub button{height:44px;border:0;border-radius:9px;background:var(--accent);color:#06181B;font:inherit;font-weight:600;padding:0 18px;cursor:pointer}
-footer{border-top:1px solid var(--hair)}footer .wrap{display:flex;flex-wrap:wrap;gap:20px;padding:22px 32px;font-size:12.5px;color:var(--ink3)}footer a{color:var(--ink3)}
-@media(max-width:800px){.cards,.two{grid-template-columns:1fr}h2.big{font-size:38px}.bar nav{display:none}}
+"""sinanlab.com 母站 v5：司南实验室总入口。数据驱动首页（读 Compute 的 data_v2.json / media.json 与 Robo 的 seed），
+与 Compute 同一套视觉（亮色卡片 + 近地轨道地球）。无框架，python3 build.py 生成到 public/。"""
+import io, os, json, shutil, html as H, datetime as dt
+HERE = os.path.dirname(os.path.abspath(__file__))
+OUT = os.path.join(HERE, "public"); os.makedirs(OUT, exist_ok=True)
+COMPASS = os.path.join(os.path.dirname(HERE), "compass", "site")
+ROBO = os.path.join(os.path.dirname(HERE), "sinan-robo", "data", "seed_v0.json")
+BASE = "https://sinanlab.com"; C = "https://compute.sinanlab.com"; R = "https://robo.sinanlab.com"
+
+D = json.load(io.open(os.path.join(COMPASS, "data_v2.json"), encoding="utf-8"))
+MEDIA = json.load(io.open(os.path.join(COMPASS, "media.json"), encoding="utf-8")) if os.path.exists(os.path.join(COMPASS, "media.json")) else {"video": [], "image": []}
+ROBOD = json.load(io.open(ROBO, encoding="utf-8")) if os.path.exists(ROBO) else {"models": [], "embodiments": []}
+GEN = D["generated_at"][:10]
+esc = lambda s: H.escape("" if s is None else str(s), quote=True)
+def fmt(x): return "—" if x is None else (("%.3f" % x) if x < 1 else ("%.2f" % x))
+def pct(r): return "—" if r is None else (("%.1f%%" % (r * 100)) if r < .1 else ("%.0f%%" % (r * 100)))
+
+# 资源：字体、地球脚本与贴图与 Compute 同源复制
+shutil.copytree(os.path.join(HERE, "fonts"), os.path.join(OUT, "fonts"), dirs_exist_ok=True)
+for d_ in ("img",):
+    src = os.path.join(COMPASS, d_)
+    if os.path.exists(src): shutil.copytree(src, os.path.join(OUT, d_), dirs_exist_ok=True)
+os.makedirs(os.path.join(OUT, "assets"), exist_ok=True)
+if os.path.exists(os.path.join(COMPASS, "dist", "assets", "earth.js")): shutil.copy(os.path.join(COMPASS, "dist", "assets", "earth.js"), os.path.join(OUT, "assets", "earth.js"))
+
+CSS = r"""
+@font-face{font-family:"Sora";font-style:normal;font-weight:400 700;font-display:swap;src:url(/fonts/Sora-latin.woff2) format("woff2")}
+@font-face{font-family:"JetBrains Mono";font-style:normal;font-weight:400 600;font-display:swap;src:url(/fonts/JetBrainsMono-latin.woff2) format("woff2")}
+:root{--ground:#F2F3F9;--ground-2:#E9EAF3;--card:#fff;--hair:#E6E7F0;--hair-2:#D5D7E6;--ink:#0F1222;--ink-2:#5A6079;--ink-3:#9AA0B8;--p:#6E56F5;--p-deep:#4B36D6;--p-soft:#EEEBFF;--p-ink:#3A2AA8;--robo:#F79009;--robo-soft:#FFF3E0;--good:#17B26A;--good-soft:#E6F7EF;--warn:#F79009;--warn-soft:#FFF3E0;--crit:#F04438;--crit-soft:#FDECEC;
+--shadow-1:0 1px 2px rgba(20,22,50,.04),0 8px 24px -12px rgba(20,22,50,.12);--shadow-2:0 2px 6px rgba(20,22,50,.06),0 24px 48px -20px rgba(55,40,160,.22);--ease:cubic-bezier(.22,1,.36,1);--spring:cubic-bezier(.34,1.4,.64,1);
+--sans:"Sora","Noto Sans SC","PingFang SC","Microsoft YaHei",system-ui,sans-serif;--mono:"JetBrains Mono",ui-monospace,Menlo,monospace}
+*{box-sizing:border-box}html,body{margin:0;background:var(--ground);color:var(--ink);font-family:var(--sans);font-size:15px;line-height:1.65;-webkit-font-smoothing:antialiased}
+a{color:inherit;text-decoration:none}button{font:inherit;color:inherit}.mono{font-family:var(--mono);font-variant-numeric:tabular-nums}
+.wrap{max-width:1180px;margin:0 auto;padding:0 28px}
+header.top{position:sticky;top:0;z-index:20;background:rgba(242,243,249,.82);backdrop-filter:blur(12px);border-bottom:1px solid var(--hair)}
+.bar{display:flex;align-items:center;gap:22px;height:64px}
+.brand{display:flex;align-items:center;gap:11px}.brand .mark{width:34px;height:34px;border-radius:11px;background:linear-gradient(145deg,#8B77FF,#4B36D6);box-shadow:0 8px 18px -8px rgba(75,54,214,.7),inset 0 1px 0 rgba(255,255,255,.35);position:relative;flex:none}
+.brand .mark:after{content:"";position:absolute;inset:9px 12px;border-radius:2px 2px 8px 8px;background:linear-gradient(#fff,#E9E6FF);transform:rotate(-28deg);box-shadow:0 2px 4px rgba(0,0,0,.25)}
+.brand b{font-size:17px;font-weight:700;letter-spacing:-.01em;display:block;line-height:1.1}.brand small{display:block;font-size:10.5px;color:var(--ink-3);letter-spacing:.06em;margin-top:2px}
+nav.main{display:flex;gap:4px;margin-left:12px}nav.main a{padding:8px 12px;border-radius:10px;color:var(--ink-2);font-weight:500;font-size:14px}nav.main a:hover{background:var(--card);color:var(--ink)}nav.main a.on{color:var(--ink);background:var(--card);box-shadow:var(--shadow-1)}
+.right{margin-left:auto;display:flex;gap:8px;align-items:center}
+.pl{display:inline-flex;align-items:center;gap:8px;padding:6px 12px;border-radius:999px;border:1px solid var(--hair-2);background:var(--card);font-size:13px;font-weight:600}.pl .d{width:8px;height:8px;border-radius:50%}
+.pl.c .d{background:var(--p)}.pl.r .d{background:var(--robo)}
+.auth img{width:28px;height:28px;border-radius:50%;border:1px solid var(--hair)}
+main{padding:22px 0 80px}
+.card{background:var(--card);border:1px solid var(--hair);border-radius:18px;box-shadow:var(--shadow-1)}.pad{padding:22px 24px}
+h1,h2,h3{margin:0;letter-spacing:-.01em}h2.sec{font-size:22px;font-weight:700}.lead{color:var(--ink-2);font-size:14px;margin:6px 0 0;max-width:760px}
+.eyebrow{font-family:var(--mono);font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--p)}
+/* hero */
+.hero{min-height:560px;border-radius:26px;overflow:hidden;position:relative;background:radial-gradient(600px 300px at 12% 0%,rgba(110,86,245,.28),transparent 60%),#040611;color:#fff;box-shadow:0 2px 6px rgba(20,22,50,.1),0 30px 60px -24px rgba(10,10,40,.7);isolation:isolate}
+.hero canvas{position:absolute;inset:0;width:100%;height:100%;display:block}.hero .stars{pointer-events:none}.hero #gl{cursor:grab;z-index:1}
+.hero .scrim{position:absolute;inset:0;background:linear-gradient(100deg,rgba(4,6,17,.78) 0%,rgba(4,6,17,.4) 45%,rgba(4,6,17,0) 70%);pointer-events:none}
+.hero .txt{position:relative;z-index:2;max-width:680px;padding:56px 52px 52px}
+.hero h1{margin:14px 0 0;font-size:52px;line-height:1.08;letter-spacing:-.025em;font-weight:700;text-wrap:balance}
+.hero p{margin:16px 0 0;font-size:16px;line-height:1.75;max-width:520px;color:rgba(255,255,255,.84)}
+.search{margin-top:26px;display:flex;align-items:center;gap:10px;background:rgba(255,255,255,.96);border-radius:16px;padding:0 8px 0 16px;height:56px;max-width:560px;box-shadow:0 20px 40px -20px rgba(0,0,0,.6)}
+.search input{flex:1;border:0;outline:0;background:transparent;font:inherit;font-size:15px;color:var(--ink);min-width:0}
+.search button{height:42px;padding:0 16px;border:0;border-radius:11px;background:var(--p);color:#fff;font-weight:600;cursor:pointer}
+.search .ex{display:none}
+.hero .hint{margin-top:10px;font-size:12.5px;color:rgba(255,255,255,.6)}.hero .hint a{color:#fff;text-decoration:underline;text-decoration-color:rgba(255,255,255,.35)}
+.hero .stat{position:absolute;right:26px;top:22px;z-index:2;display:flex;gap:10px}
+.hero .stat div{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.18);backdrop-filter:blur(10px);border-radius:14px;padding:10px 14px;text-align:right}
+.hero .stat b{display:block;font-family:var(--mono);font-size:20px;font-weight:600;line-height:1}.hero .stat small{font-size:11px;opacity:.8}
+.hero .tag{position:absolute;right:26px;bottom:16px;z-index:2;font-family:var(--mono);font-size:10px;letter-spacing:.1em;opacity:.5;text-align:right;line-height:1.6}
+/* board */
+.board{margin-top:18px;overflow:hidden}
+.bh{display:flex;align-items:flex-end;gap:14px;padding:22px 24px 8px;flex-wrap:wrap}.bh .r{margin-left:auto;font-family:var(--mono);font-size:11.5px;color:var(--ink-3)}
+.tablewrap{overflow-x:auto}table{width:100%;border-collapse:collapse}
+th{font-family:var(--mono);font-size:10.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-3);text-align:left;font-weight:500;padding:12px 16px;border-bottom:1px solid var(--hair);white-space:nowrap}
+th:first-child,td:first-child{padding-left:24px}td{padding:13px 16px;border-bottom:1px solid var(--hair);vertical-align:middle}tr:last-child td{border-bottom:0}tbody tr:hover{background:#FAFAFE}
+td.num,th.num{text-align:right;font-family:var(--mono);font-variant-numeric:tabular-nums;white-space:nowrap}
+.name{font-weight:600}.sub{font-size:11.5px;color:var(--ink-3);margin-top:2px}.big{font-size:16px;font-weight:600}
+.dom{font-family:var(--mono);font-size:13px;font-weight:500}
+.pill{display:inline-flex;align-items:center;gap:6px;font-size:11.5px;font-weight:500;padding:4px 10px;border-radius:999px;white-space:nowrap}.pill:before{content:"";width:6px;height:6px;border-radius:50%;background:currentColor}
+.pill.explainable,.pill.normal{background:var(--good-soft);color:#067647}.pill.below_bulk{background:var(--warn-soft);color:#B54708}.pill.premium{background:var(--p-soft);color:var(--p-ink)}.pill.new{background:var(--p-soft);color:var(--p-ink)}
+.r{font-family:var(--mono);font-size:13px;font-weight:600}.r.explainable,.r.normal{color:#067647}
+.tfoot{display:flex;flex-wrap:wrap;gap:8px 22px;padding:14px 24px;border-top:1px solid var(--hair);font-size:12px;color:var(--ink-3)}
+/* kpis */
+.kpis{display:grid;grid-template-columns:repeat(5,1fr);gap:14px;margin-top:18px}
+.kpi{padding:18px 20px 16px;display:block;transition:transform .45s var(--spring),box-shadow .45s var(--ease)}.kpi:hover{transform:translateY(-3px);box-shadow:var(--shadow-2)}
+.kpi .k{font-size:12px;color:var(--ink-2);font-weight:500}.kpi .v{font-family:var(--mono);font-size:30px;font-weight:600;letter-spacing:-.02em;margin-top:10px;line-height:1}.kpi .v small{font-size:12px;color:var(--ink-3);font-weight:500;margin-left:4px}.kpi .n{font-size:12px;color:var(--ink-3);margin-top:8px}
+/* products */
+.prods{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:18px}
+.prod{padding:26px 28px;position:relative;overflow:hidden;display:block;transition:transform .5s var(--spring),box-shadow .5s var(--ease)}.prod:hover{transform:translateY(-3px);box-shadow:var(--shadow-2)}
+.prod .orb{position:absolute;right:-40px;top:-40px;width:170px;height:170px;border-radius:50%}
+.prod.c .orb{background:radial-gradient(circle at 32% 30%,#C9BEFF,#6E56F5 55%,#2E1E9C);box-shadow:inset -18px -22px 36px rgba(30,10,110,.4)}
+.prod.r .orb{background:radial-gradient(circle at 32% 30%,#FFD9A0,#F79009 55%,#A45A00);box-shadow:inset -18px -22px 36px rgba(110,50,0,.35)}
+.prod .k{font-family:var(--mono);font-size:11px;letter-spacing:.18em;text-transform:uppercase}.prod.c .k{color:var(--p)}.prod.r .k{color:#B54708}
+.prod h3{font-size:26px;margin-top:8px;max-width:78%}.prod p{color:var(--ink-2);font-size:14px;margin:10px 0 0;max-width:80%}
+.prod ul{margin:14px 0 0;padding:0;list-style:none;display:grid;gap:6px;font-size:13.5px}.prod li b{font-family:var(--mono);font-weight:600}
+.prod .go{margin-top:18px;display:inline-flex;align-items:center;gap:8px;font-weight:600;color:var(--p-ink)}.prod.r .go{color:#B54708}
+/* grid */
+.grid2{display:grid;grid-template-columns:1.3fr 1fr;gap:16px;margin-top:18px}
+.feed .row{display:grid;grid-template-columns:52px 1fr;gap:12px;padding:12px 0;border-bottom:1px solid var(--hair);font-size:13px}.feed .row:last-child{border-bottom:0}.feed .t{font-family:var(--mono);font-size:11px;color:var(--ink-3);padding-top:2px}
+.old{color:var(--ink-3);text-decoration:line-through;font-family:var(--mono)}.new{color:var(--good);font-family:var(--mono);font-weight:600}
+.why{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:14px}.why .it{padding:16px 18px;border:1px solid var(--hair);border-radius:14px;background:#FBFBFE}.why .it b{display:block;font-size:14px}.why .it span{font-size:13px;color:var(--ink-2)}
+.btn{display:inline-flex;align-items:center;gap:8px;height:42px;padding:0 18px;border-radius:12px;border:0;cursor:pointer;font-weight:600;font-size:13.5px;transition:transform .35s var(--spring)}.btn:hover{transform:translateY(-2px)}
+.btn.p{background:var(--p);color:#fff;box-shadow:0 10px 22px -12px rgba(75,54,214,.9)}.btn.o{background:var(--card);color:var(--ink);border:1px solid var(--hair-2)}.btn.w{background:#fff;color:var(--p-deep)}.btn.g{background:rgba(255,255,255,.08);color:#fff;border:1px solid rgba(255,255,255,.3)}
+.law{counter-reset:c;list-style:none;padding:0;margin:14px 0 0;display:grid;grid-template-columns:repeat(2,1fr);gap:12px}.law li{display:grid;grid-template-columns:40px 1fr;gap:12px;padding:16px 18px;border:1px solid var(--hair);border-radius:14px;background:#FBFBFE}.law li:before{counter-increment:c;content:counter(c,decimal-leading-zero);font-family:var(--mono);color:var(--p);font-size:12px;padding-top:3px}.law b{display:block;font-size:14.5px;margin-bottom:3px}.law span{color:var(--ink-2);font-size:13px}
+.prose{max-width:780px;font-size:15px;line-height:1.85}.prose h1{font-size:30px;margin:0 0 8px}.prose h2{font-size:20px;margin:28px 0 8px}.prose h3{font-size:16px;margin:20px 0 6px}.prose p{margin:8px 0;color:var(--ink-2)}.prose ul{padding-left:20px;color:var(--ink-2)}.prose a{color:var(--p-ink);text-decoration:underline;text-decoration-color:var(--hair-2)}
+.notice{border:1px solid #F5C87A;background:var(--warn-soft);border-radius:12px;padding:12px 16px;color:#7A4B00;font-size:13.5px}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:14px}.box{padding:18px 20px;border:1px solid var(--hair);border-radius:14px;background:#FBFBFE}.box h3{font-size:15px;margin-bottom:8px}.box ul{margin:0;padding-left:18px;color:var(--ink-2);font-size:13.5px}.box.ok{border-color:#9ADBB9}.box.no{border-color:#F5A9A3}
+footer.ft{border-top:1px solid var(--hair);margin-top:60px}footer.ft .in{display:flex;flex-wrap:wrap;gap:16px 20px;padding:22px 0;font-size:12.5px;color:var(--ink-3)}footer.ft a{color:var(--ink-3)}footer.ft a:hover{color:var(--ink)}
+.rise{animation:rise .8s var(--ease) both;animation-delay:calc(var(--i,0)*70ms)}@keyframes rise{from{opacity:0;transform:translateY(18px) scale(.985)}}
+@media (prefers-reduced-motion:reduce){*,*:before,*:after{animation-duration:.01ms!important;transition-duration:.01ms!important}}
+@media (max-width:1100px){.kpis{grid-template-columns:repeat(3,1fr)}.why{grid-template-columns:1fr}.law{grid-template-columns:1fr}}
+@media (max-width:860px){nav.main{display:none}.hero{min-height:620px}.hero .txt{padding:28px 24px 30px;max-width:none}.hero h1{font-size:34px}.hero .scrim{background:linear-gradient(180deg,rgba(4,6,17,.8) 0%,rgba(4,6,17,.35) 55%,transparent 80%)}.hero .stat,.hero .tag{display:none}.prods,.grid2,.two{grid-template-columns:1fr}.kpis{grid-template-columns:1fr 1fr}.prod h3,.prod p{max-width:none}.pl span{display:none}}
 """
-LOGO='<svg width="30" height="30" viewBox="0 0 40 40" aria-hidden="true"><circle cx="20" cy="20" r="17.5" fill="none" stroke="#2A3644" stroke-width="1.2"/><path d="M20 5v4M20 31v4M5 20h4M31 20h4" stroke="#64768A" stroke-width="1.2" stroke-linecap="round"/><path d="M20 9 L24.5 20 L20 31 Z" fill="#4FD1D9"/><path d="M20 9 L15.5 20 L20 31 Z" fill="#2A3644"/><circle cx="20" cy="20" r="2.2" fill="#0B0F14" stroke="#4FD1D9" stroke-width="1.4"/></svg>'
-NAV=[("/","首页"),("/constitution","中立宪法"),("/about","关于"),("/subscribe","订阅")]
-def page(fn, title, desc, body, active):
-    nav="".join('<a href="%s"%s>%s</a>' % (h, ' class="on"' if h.strip("/")==active.replace(".html","").strip("/") else "", t) for h,t in NAV)
-    html=f'''<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>{title}</title><meta name="description" content="{desc}"><meta property="og:site_name" content="Sinan Lab"><meta property="og:title" content="{title}"><meta property="og:description" content="{desc}"><link rel="canonical" href="https://sinanlab.com/{'' if fn=='index.html' else fn.replace('.html','')}"><link rel="icon" href="/favicon.svg" type="image/svg+xml"><meta name="theme-color" content="#0B0F14"><style>{FONT_CSS}</style><style>{CSS}</style></head><body>
-<header><div class="wrap bar"><a class="brand" href="/">{LOGO}<div><h1>Sinan Lab</h1><div class="sub">司南实验室 · AI 基础设施的中立测量者</div></div></a><nav>{nav}<a href="https://compute.sinanlab.com">Sinan Compute</a><a href="https://robo.sinanlab.com">Sinan Robo</a></nav></div></header>
-<main><div class="wrap">{body}</div></main>
-<footer><div class="wrap"><span>© 2026 Sinan Lab · 司南实验室</span><a href="/constitution">中立宪法</a><a href="/disclosure">返佣披露</a><a href="/privacy">隐私政策</a><a href="/disclaimer">免责声明</a><a href="mailto:hello@sinanlab.com">hello@sinanlab.com</a><span style="margin-left:auto">每个数字可追溯来源 · 不收任何被测渠道的钱</span></div></footer></body></html>'''
-    io.open(os.path.join(OUT,fn),"w",encoding="utf-8").write(html)
 
-page("index.html","Sinan Lab · 司南实验室 —— AI 基础设施的中立测量者","司南实验室：对 GPU 租赁、模型 API 渠道与具身智能模型做中立测量。每个数字可追溯来源，不收任何被测渠道的钱。",f'''
-<div class="eyebrow">Sinan Lab · 司南实验室</div>
-<h2 class="big">看清算力，才好买算力。<br><em>AI 基础设施的中立测量者。</em></h2>
-<p class="lead">我们不卖算力、不做中转、不收被测者的钱。我们只做一件事：把官方价、公开市场价和渠道实付价放在同一把尺上，把每个数字的来源、抓取时间和快照留下来，让你自己判断。</p>
-<div class="cards">
-  <a class="card compute" href="https://compute.sinanlab.com"><div class="k">Sinan Compute · 司南·算力</div><h3>GPU 与模型 API 的中立比价与质量测量</h3><p>306 个已确认渠道、1.3 万条实付报价、图像与视频按秒/按张比对。每一行一把"罗盘尺"：官方价在 100% 中线，渠道实付是尺上的指针。</p><span class="cta">进入 compute.sinanlab.com →</span></a>
-  <a class="card robo soon" href="https://robo.sinanlab.com"><div class="k">Sinan Robo · 司南·机脑 <span class="badge">即将上线</span></div><h3>开源具身模型（VLA）的可审计索引</h3><p>模型 × 本体适配矩阵、硬件延迟与推理成本、方法论公开。首批 11 个模型、7 个本体已录入，未核实字段一律标"待核实"，不猜。</p><span class="cta">看首批预览 →</span></a>
+NAV = [("/", "首页", "index.html"), ("/constitution", "中立宪法", "constitution.html"), ("/about", "关于", "about.html"), ("/subscribe", "订阅", "subscribe.html")]
+def page(fn, title, desc, body, active="", og="/img/og.png", jsonld=None, scripts=""):
+    nav = "".join('<a href="%s"%s>%s</a>' % (h, ' class="on"' if f == active else "", t) for h, t, f in NAV)
+    path = "" if fn == "index.html" else fn.replace(".html", "")
+    ld = "".join('<script type="application/ld+json">%s</script>' % json.dumps(x, ensure_ascii=False).replace("</", "<\\/") for x in (jsonld or []))
+    html = u"""<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>%s</title><meta name="description" content="%s"><link rel="canonical" href="%s/%s"><meta property="og:site_name" content="Sinan Lab"><meta property="og:type" content="website"><meta property="og:title" content="%s"><meta property="og:description" content="%s"><meta property="og:url" content="%s/%s"><meta property="og:image" content="%s%s"><meta name="twitter:card" content="summary_large_image"><meta name="twitter:image" content="%s%s"><link rel="icon" href="/favicon.svg" type="image/svg+xml"><meta name="theme-color" content="#040611"><link rel="alternate" type="application/rss+xml" title="Sinan Compute 价格变动" href="%s/feed.xml">%s<style>%s</style></head><body>
+<header class="top"><div class="wrap bar"><a class="brand" href="/"><span class="mark"></span><div><b>Sinan Lab</b><small>司南实验室 · AI 基础设施的中立测量者</small></div></a><nav class="main">%s</nav><div class="right"><a class="pl c" href="%s"><span class="d"></span><span>Sinan Compute</span></a><a class="pl r" href="%s"><span class="d"></span><span>Sinan Robo</span></a><span class="auth" id="auth"></span></div></div></header>
+<main><div class="wrap">%s</div></main>
+<footer class="ft"><div class="wrap in"><span>© 2026 Sinan Lab · 司南实验室</span><a href="/constitution">中立宪法</a><a href="/disclosure">返佣披露</a><a href="/privacy">隐私政策</a><a href="/disclaimer">免责声明</a><a href="%s/method">方法论与数据</a><a href="%s/feed.xml">RSS</a><a href="mailto:hello@sinanlab.com">hello@sinanlab.com</a><span style="margin-left:auto">每个数字可追溯来源 · 不收任何被测渠道的钱</span></div></footer>
+<script>(function(){var b=document.getElementById("auth");if(!b)return;fetch("%s/api/me",{credentials:"include"}).then(function(r){return r.json();}).then(function(m){if(m&&m.user){b.innerHTML='<a href="%s/me" title="我的关注">'+(m.user.avatar_url?'<img src="'+m.user.avatar_url+'" alt="">':'我的')+'</a>';}else if(m&&m.login){b.innerHTML='<a class="pl" href="%s/api/auth/github/start?return_to='+encodeURIComponent(location.href)+'">GitHub 登录</a>';}}).catch(function(){});})();</script>%s</body></html>""" % (
+        esc(title), esc(desc), BASE, path, esc(title), esc(desc), BASE, path, C if og.startswith("/img") else BASE, og, C if og.startswith("/img") else BASE, og, C, ld, CSS, nav, C, R, body, C, C, C, C, C, scripts)
+    io.open(os.path.join(OUT, fn), "w", encoding="utf-8").write(html)
+
+# ---------------- 首页 ----------------
+st = D["stats"]; CL = st["clusters"]
+# 行情板：最新两代里有报价最多的 8 个模型
+board_models = sorted([m for m in D["models"] if m["is_latest"]], key=lambda m: -m["n_relay"])[:8]
+def best_row(m):
+    ok = [r for r in m["rows"] if not r["held"] and r["band"] in ("explainable", "normal")]
+    return min(ok, key=lambda r: r["out"]) if ok else None
+board = ""
+for m in board_models:
+    b = best_row(m); f = m["floor"]
+    un = sum(1 for r in m["rows"] if not r["held"] and r["band"] == "unsustainable")
+    board += '<tr><td><a class="name" href="%s/m/%s">%s</a><div class="sub">%s · %d 家在卖</div></td><td class="num"><span class="big">$%s</span><span class="sub">%s</span></td>%s<td class="num">%d</td><td class="num"><a class="btn o" style="height:32px;padding:0 12px;font-size:12px" href="%s/m/%s">全部 %d 家 →</a></td></tr>' % (
+        C, esc(m["id"]), esc(m["name"]), esc(D["vendor_name"].get(m["vendor"], m["vendor"])), m["n_relay"], fmt(f["out"]), esc(f["vendor"]),
+        ('<td class="num"><span class="big">$%s</span><span class="sub"><a class="dom" href="%s/s/%s">%s</a></span></td><td><span class="r %s">%s</span> <span class="pill %s">%s</span></td>' % (fmt(b["out"]), C, esc(b["vendor"]), esc(b["vendor"]), b["band"], pct(b["ratio"]), b["band"], "价格说得通" if b["band"] == "explainable" else "与公开价接近")) if b else '<td class="num">—</td><td><span class="sub">没有落在说得通区间的报价</span></td>',
+        un, C, esc(m["id"]), m["n_relay"])
+changes = D.get("changes", [])[:6]
+feed = "".join('<div class="row"><div class="t">%s</div><div><a class="dom" href="%s/s/%s">%s</a> · <a href="%s/m/%s">%s</a> <span class="old">%s</span> → <span class="new">%s</span> %s<div class="sub">%s · $/百万输出</div></div></div>' % (
+    c["t"][5:16].replace("T", " "), C, esc(c["vendor"]), esc(c["vendor"]), C, esc(c["model"]), esc(c["model"]), fmt(c["old"]), fmt(c["new"]), "↑" if c["new"] > c["old"] else "↓", "中转站名义价" if c["kind"] == "relay" else "公开参考价") for c in changes) or '<div class="row"><div class="t">今日</div><div class="sub">没有价格变动。变更需连续两次抓取一致才发布。</div></div>'
+fam_ref = sum(1 for mod in ("video", "image") for f in MEDIA.get(mod, []) if f.get("ref"))
+robo_models = ROBOD.get("models", []); robo_nc = sum(1 for m in robo_models if m.get("commercial_ok") is False); robo_ok = sum(1 for m in robo_models if m.get("commercial_ok") is True)
+kpis = [("已确认中转站", st["confirmed"], "", "面板指纹确认 · 每小时探测可达", C + "/sites"), ("实付报价", format(st["quotes"], ","), "", "每天抓一次 · 每条带快照", C + "/"),
+        ("实付低于成本下限的站", CL["ultra"], " / %d" % (CL["ultra"] + CL["cheap"] + CL["near"] + CL["high"]), "算术分档 · 不推测成因", C + "/sites#c=ultra"),
+        ("图像 / 视频族有官方参考", fam_ref, " / %d" % sum(len(MEDIA.get(k, [])) for k in ("video", "image")), "Seedance · Veo · 可灵 · Vidu · 万相…", C + "/media"),
+        ("开源具身模型", len(robo_models), " · %d 本体" % len(ROBOD.get("embodiments", [])), "%d 可商用 · %d 禁商用 · 其余待核实" % (robo_ok, robo_nc), R + "/models")]
+kpi_html = "".join('<a class="card kpi rise" style="--i:%s" href="%s"><div class="k">%s</div><div class="v">%s%s</div><div class="n">%s</div></a>' % (2 + i * .4, u, k, v, ('<small>%s</small>' % s) if s else "", n) for i, (k, v, s, n, u) in enumerate(kpis))
+home = u"""
+<section class="hero rise" style="--i:1"><canvas class="stars" id="stars"></canvas><canvas id="gl"></canvas><div class="scrim"></div>
+<div class="txt"><div class="eyebrow">司南实验室 · AI 基础设施的中立测量者</div><h1>看清算力，<br>才好买算力。</h1>
+<p>我们把 %d 个模型 API 中转站的实付价，对着官方与公开市场价逐条算成比率；再把开源具身模型的许可证、权重、能上哪些机器人做成可审计的索引。每个数字都能点开看来源。不收任何被测渠道的钱，也不替你判断。</p>
+<form class="search" action="%s/sites" method="get" onsubmit="var v=this.q.value.trim();if(!v)return false;location.href='%s/sites#q='+encodeURIComponent(v);return false;"><input name="q" placeholder="查一个中转站（如 toapis.cn）或一个模型（如 DeepSeek V4）"><button type="submit">查</button></form>
+<div class="hint">或直接看：<a href="%s/m/deepseek-v4-pro">DeepSeek V4 Pro 在 %d 家中转站的实付</a> · <a href="%s/media/seedance">Seedance 按秒价</a> · <a href="%s/models">开源 VLA 索引</a></div></div>
+<div class="stat"><div><b>%s</b><small>条实付报价</small></div><div><b>%d</b><small>个中转站</small></div><div><b>%d</b><small>个具身模型</small></div></div>
+<div class="tag">地球影像 NASA BLUE MARBLE · BLACK MARBLE<br>实时大气散射 · 拖动转动地球</div></section>
+
+<div class="kpis">%s</div>
+
+<section class="card board rise" style="--i:4"><div class="bh"><div><h2 class="sec">今天的行情板</h2><p class="lead">最新两代里在卖最多的 %d 个模型：参考价、说得通的最低实付是谁给的、多少家低于成本下限。点模型名看全部中转站。</p></div><span class="r">数据 %s · USD/CNY %.2f</span></div>
+<div class="tablewrap"><table><thead><tr><th>模型</th><th class="num">参考价 $/百万输出</th><th class="num">说得通的最低实付</th><th>是参考价的几成</th><th class="num">低于成本下限</th><th class="num"></th></tr></thead><tbody>%s</tbody></table></div>
+<div class="tfoot"><span>参考价 = 官方与公开市场最低；实付 = 面板名义价 × 充值比例 ÷ 汇率；"说得通" = 落在常见批量折扣区间。此为算术比值，不构成对任何渠道的指控。</span></div></section>
+
+<div class="prods">
+<a class="card prod c rise" style="--i:5" href="%s"><span class="orb"></span><div class="k">Sinan Compute · 司南·算力</div><h3>模型 API 中转站实付比价</h3><p>%d 个站、%s 条报价、%d 个图像视频族。每个站一页事实清单：充值比例、登录方式、24 小时可达率、它卖的每个模型是参考价的几成。</p><ul><li><b>%d</b> 家实付低于成本下限，我们标出来但不推测成因</li><li><b>%d</b> 家计价方式待核，只列名义价不出比率</li><li>每天凌晨自动重抓、重算、重发</li></ul><span class="go">进入 compute.sinanlab.com →</span></a>
+<a class="card prod r rise" style="--i:5.5" href="%s"><span class="orb"></span><div class="k">Sinan Robo · 司南·机脑</div><h3>开源具身模型的可审计索引</h3><p>%d 个开源 / 开放权重 VLA、%d 个机器人本体。许可证、权重、代码、参数量每个字段带来源；没核实的写"待核实"，不猜。</p><ul><li><b>%d</b> 个模型许可证明确允许商用，<b>%d</b> 个明确禁止</li><li>模型 × 本体适配矩阵，只给有证据的格子上色</li><li>延迟与每千次推理成本层已就位，等实测填入</li></ul><span class="go">进入 robo.sinanlab.com →</span></a>
 </div>
-<section class="sec"><h2>我们凭什么让你信</h2>
-<ol class="law">
-<li><b>排名与判读永不含商业变量</b><span>有返佣与无返佣的渠道同等收录、同等展示；算法里没有佣金这个字段。</span></li>
-<li><b>不收任何被测渠道的钱</b><span>不做付费认证、不接被测者的广告与赞助。检测页零商业链接。</span></li>
-<li><b>每个数字带证据</b><span>来源 URL、抓取时间、原始快照哈希，永不覆盖。算错了公开更正，原记录保留。</span></li>
-<li><b>只说算术，不说人</b><span>"在无补贴假设下数学上不可持续"是算术；"假模型""诈骗"不是。指控性词汇在发布管线里被拦下，不靠自觉。</span></li>
-<li><b>方法论与收入占比公开</b><span>方法版本永久公开；一旦有收入，每季度公开来源占比。</span></li>
-</ol><p style="margin-top:14px;font-size:14px;color:var(--ink3)">全文见 <a href="/constitution">中立宪法</a>。</p></section>
-''', "index.html")
 
-page("constitution.html","中立宪法 · Sinan Lab","司南实验室的中立宪法与措辞宪法全文：不收被测者的钱、排名不含商业变量、每个数字带证据、只说算术不说人、方法与收入公开。",'''
-<div class="eyebrow">中立宪法 · 不可协商</div><h2 class="big">五条写进网站、写进代码的<em>约束。</em></h2>
-<p class="lead">这不是价值宣言，是产品的运行规则。其中第一、四条已经是代码：排序函数里没有佣金字段；发布管线里有一道禁用词闸门。</p>
-<section class="sec"><ol class="law">
+<div class="grid2">
+<section class="card pad rise" style="--i:6"><h2 class="sec">登录以后多了什么</h2><p class="lead">所有数据不登录也全看得到。登录只解锁属于你自己的东西，不设密码，GitHub 一键。</p>
+<div class="why"><div class="it"><b>关注一个站或模型</b><span>价格变、可达率掉、检测结果变，第一时间提醒你（邮件与飞书 / 钉钉接入中）。</span></div><div class="it"><b>看全部价格历史</b><span>匿名看最近 7 天，登录看从收录第一天起的每一次变价。</span></div><div class="it"><b>提交纠错并署名</b><span>发现数据不对，提交来源链接，审核通过后记入修正日志并署你的名。</span></div></div>
+<div style="margin-top:16px;display:flex;gap:10px;flex-wrap:wrap"><a class="btn p" href="%s/api/auth/github/start?return_to=%s/">用 GitHub 登录 →</a><a class="btn o" href="%s/method">先看看我们怎么算的</a></div></section>
+<section class="card pad feed rise" style="--i:7"><h2 class="sec">今日价格变动</h2><div style="margin-top:6px">%s</div><div style="margin-top:12px;display:flex;gap:14px;font-size:13px"><a href="%s/weekly" style="color:var(--p-ink)">每周价格周报 →</a><a href="%s/feed.xml" style="color:var(--p-ink)">RSS 订阅</a></div></section>
+</div>
+
+<section class="card pad rise" style="margin-top:18px;--i:8"><h2 class="sec">凭什么信我们</h2><ol class="law">
+<li><b>不收任何被测渠道的钱</b><span>不做付费认证、不接被测者的广告与赞助。检测页零商业链接。</span></li>
+<li><b>排名与判读永不含商业变量</b><span>有返佣与无返佣的渠道同等收录、同等展示；算法里没有佣金这个字段。</span></li>
+<li><b>每个数字带证据</b><span>来源 URL、抓取时间、原始快照哈希，永不覆盖。算错了公开更正，原记录保留。</span></li>
+<li><b>只说算术，不说人</b><span>"在无补贴假设下数学上不可持续"是算术；指控性词汇在发布管线里被拦下，不靠自觉。</span></li>
+</ol><p style="margin-top:12px;font-size:13px;color:var(--ink-3)">全文见 <a href="/constitution" style="color:var(--p-ink)">中立宪法</a> · 原始数据在 <a href="%s/method#data" style="color:var(--p-ink)">这里下载</a></p></section>
+""" % (st["confirmed"], C, C, C, next((m["n_relay"] for m in D["models"] if m["id"] == "deepseek-v4-pro"), 0), C, R, format(st["quotes"], ","), st["confirmed"], len(robo_models), kpi_html, len(board_models), GEN, D["fx"]["rate"], board,
+       C, st["confirmed"], format(st["quotes"], ","), sum(len(MEDIA.get(k, [])) for k in ("video", "image")), CL["ultra"], CL["held"], R, len(robo_models), len(ROBOD.get("embodiments", [])), robo_ok, robo_nc,
+       C, BASE, C, feed, C, C, C)
+ld_home = [{"@context": "https://schema.org", "@type": "Organization", "name": "Sinan Lab", "alternateName": "司南实验室", "url": BASE, "logo": BASE + "/favicon.svg", "email": "hello@sinanlab.com", "sameAs": ["https://github.com/sinanlabs"]},
+           {"@context": "https://schema.org", "@type": "WebSite", "name": "Sinan Lab", "url": BASE + "/", "inLanguage": "zh-CN", "potentialAction": {"@type": "SearchAction", "target": {"@type": "EntryPoint", "urlTemplate": C + "/sites#q={search_term_string}"}, "query-input": "required name=search_term_string"}}]
+page("index.html", "Sinan Lab · 司南实验室 —— 看清算力，才好买算力", "司南实验室：%d 个模型 API 中转站的实付比价与可达性测量，%d 个开源具身模型的可审计索引。每个数字带来源，不收任何被测渠道的钱，不推荐。" % (st["confirmed"], len(robo_models)), home, "index.html", jsonld=ld_home, scripts='<script src="/assets/earth.js?v=%s" defer></script>' % GEN.replace("-", ""))
+
+# ---------------- 其他页 ----------------
+page("constitution.html", "中立宪法 · Sinan Lab", "司南实验室的中立宪法与措辞宪法全文：不收被测者的钱、排名不含商业变量、每个数字带证据、只说算术不说人、方法与收入公开。", u"""
+<div class="rise" style="--i:0;margin-bottom:14px"><div class="eyebrow">中立宪法 · 不可协商</div><h1 style="font-size:30px;margin-top:8px">五条写进网站、写进代码的约束</h1><p class="lead">这不是价值宣言，是产品的运行规则。其中第一、五条已经是代码：排序函数里没有佣金字段；发布管线里有一道禁用词闸门，命中就不部署。</p></div>
+<section class="card pad rise" style="--i:1"><ol class="law">
 <li><b>排名与推荐算法永不含佣金变量</b><span>有返佣与无返佣渠道同等收录、同等展示。任何含返佣的位置按《互联网广告管理办法》显著标明"广告"。</span></li>
 <li><b>不做付费认证</b><span>任何受托测试只收执行费，结果绝不冠以"独立认证"名义。</span></li>
 <li><b>不接受被测量渠道的任何资金</b><span>广告、赞助、返佣，一律不得进入质量测量层页面。</span></li>
 <li><b>每季度公开收入来源占比</b><span>修正日志与方法论版本永久公开。</span></li>
-<li><b>证据先于结论</b><span>展示层任何数字都必须能追回一条原始快照；追不回的不予显示——这条在数据库层是断言，不是约定。</span></li>
+<li><b>证据先于结论</b><span>展示层任何数字都必须能追回一条原始快照；追不回的不予显示。这条在数据库层是断言，不是约定。</span></li>
 </ol></section>
-<section class="sec"><h2>措辞宪法</h2><div class="two">
+<section class="card pad rise" style="margin-top:16px;--i:2"><h2 class="sec">措辞宪法</h2><div class="two" style="margin-top:12px">
 <div class="box ok"><h3>可以这么写</h3><ul><li>"该端点输出分布与参考端点统计不一致（置信度 92%，n=1,240，2026-08 窗口）"</li><li>"该渠道对该模型的实付价为最低公开渠道价的 7.5%，在无补贴假设下数学上不可持续"</li><li>"本次测量未能复现上月结论，原因待查"</li></ul></div>
-<div class="box no"><h3>永不这么写</h3><ul><li>"实锤""假模型""套壳""诈骗""降智"</li><li>任何不带样本量与时间窗的质量结论</li><li>任何形式的"推荐榜"——我们给事实清单，判断权交回给你</li></ul></div></div>
-<p style="margin-top:14px;font-size:14px;color:var(--ink3)">所有质量类结论必须同时带样本量、时间窗、置信度三个字段，缺一个发布管线直接拦下。具名发布前有 72 小时预通知与申诉窗口；同一结论须在两个独立时间窗复现；对照端点误报率 &lt;5% 的指标才启用。</p></section>
-''', "constitution.html")
+<div class="box no"><h3>永不这么写</h3><ul><li>"实锤""假模型""套壳""诈骗""降智"</li><li>任何不带样本量与时间窗的质量结论</li><li>任何形式的"推荐榜"。我们给事实清单，判断权交回给你</li></ul></div></div>
+<p class="lead" style="margin-top:12px">所有质量类结论必须同时带样本量、时间窗、置信度三个字段，缺一个发布管线直接拦下。具名发布前有 72 小时预通知与申诉窗口；同一结论须在两个独立时间窗复现。</p></section>""", "constitution.html")
 
-page("about.html","关于 · Sinan Lab","司南实验室是一个一人加 AI 的小团队，做 AI 基础设施的中立测量：算力与模型渠道（Sinan Compute）、具身智能模型（Sinan Robo）。",'''
-<div class="eyebrow">关于</div><h2 class="big">一个中立的<em>测量者</em>，不是导航站。</h2>
-<div class="prose"><p class="lead">司南是中国最早的指向仪器。我们借这个名字做一件事：在算力与模型这个信息极不对称的市场里，给买方一把可以自己校验的尺。</p>
+page("about.html", "关于 · Sinan Lab", "司南实验室是一个一人加 AI 的小团队，做 AI 基础设施的中立测量：算力与模型渠道（Sinan Compute）、具身智能模型（Sinan Robo）。", u"""
+<div class="rise" style="--i:0;margin-bottom:14px"><div class="eyebrow">关于</div><h1 style="font-size:30px;margin-top:8px">一个中立的测量者，不是导航站</h1></div>
+<section class="card pad prose rise" style="--i:1"><p>司南是中国最早的指向仪器。我们借这个名字做一件事：在算力与模型这个信息极不对称的市场里，给买方一把可以自己校验的尺。</p>
 <h3>我们做什么</h3><p>持续采集官方定价、公开市场价与各渠道的实付价，用统一口径比对；对渠道做可用性与一致性测量；对具身智能的开源模型做可审计的索引。全部结论带证据链，全部方法公开。</p>
 <h3>我们不做什么</h3><p>不卖算力，不做中转，不做付费认证，不推荐。不收任何被测渠道的钱。</p>
-<h3>怎么运作</h3><p>一人 + AI 的小团队，全流程 Runbook 化。数据与代码本身即是资产。目前完全免费、免注册。</p>
-<h3>联系</h3><p>渠道方对数据有异议，请通过 <a href="mailto:hello@sinanlab.com">hello@sinanlab.com</a> 提交核对请求，我们按公开的修正流程处理并保留原记录。</p></div>
-''', "about.html")
+<h3>怎么运作</h3><p>一人 + AI 的小团队，采集、计算、生成、部署全流程每天自动跑。数据与代码本身即是资产。目前完全免费、不注册也看全部。</p>
+<h3>联系</h3><p>渠道方对数据有异议，请通过 <a href="mailto:hello@sinanlab.com">hello@sinanlab.com</a> 提交核对请求，我们按公开的修正流程处理并保留原记录。</p></section>""", "about.html")
 
-page("subscribe.html","订阅 · Sinan Lab","订阅司南实验室：算力价格周报与机脑行情。邮箱或 RSS，不强制注册，随时一键退订。",'''
-<div class="eyebrow">订阅</div><h2 class="big">价格变了、新站出现了、测量异常了——<em>我们告诉你。</em></h2>
-<p class="lead">每周一封。邮箱单独存放、不与任何数据关联、随时一键退订。</p>
-<div class="notice">邮件订阅服务正在接入，接通前先发邮件到 <a href="mailto:hello@sinanlab.com?subject=subscribe">hello@sinanlab.com</a> 写“订阅”，我们手动加你。不会有营销邮件，只发有变化的。</div>
-<p style="margin-top:10px;font-size:13px;color:var(--ink3)">订阅服务接入中：表单地址上线前会替换为正式地址。也可以用 RSS：<span class="mono">https://compute.sinanlab.com/feed.xml</span>（即将开通）。</p>
-<section class="sec"><h2>两栏内容</h2><div class="two"><div class="box"><h3>算力价格周报 · Sinan Compute</h3><ul><li>本周官方与公开市场价变动</li><li>新收录渠道与消失的渠道</li><li>实付价异常与一致性测量摘要</li></ul></div><div class="box"><h3>机脑行情 · Sinan Robo</h3><ul><li>开源 VLA 模型新发布与许可证变化</li><li>模型 × 本体适配矩阵更新</li><li>硬件延迟与推理成本实测</li></ul></div></div></section>
-''', "subscribe.html")
+page("subscribe.html", "订阅 · Sinan Lab", "订阅司南实验室：价格变动提醒、每周价格周报、机脑行情。RSS 现在可用，邮件接入中。", u"""
+<div class="rise" style="--i:0;margin-bottom:14px"><div class="eyebrow">订阅</div><h1 style="font-size:30px;margin-top:8px">价格变了、新站出现了、测量异常了，我们告诉你</h1></div>
+<div class="two"><section class="card pad rise" style="--i:1"><h2 class="sec">现在就能用</h2><p class="lead">RSS 每天更新价格变动与新收录；每周一自动生成周报页。</p><div style="margin-top:14px;display:flex;gap:10px;flex-wrap:wrap"><a class="btn p" href="%s/feed.xml">RSS 订阅</a><a class="btn o" href="%s/weekly">价格周报</a></div>
+<p class="lead" style="margin-top:14px">想按站、按模型收提醒：登录后在站点页或模型页点"关注"。</p><a class="btn o" style="margin-top:10px" href="%s/api/auth/github/start?return_to=%s/subscribe">用 GitHub 登录 →</a></section>
+<section class="card pad rise" style="--i:2"><h2 class="sec">邮件提醒与周报</h2><div class="notice" style="margin-top:12px">邮件服务正在接入。接通后，关注的站或模型有变化会发邮件；每周一封周报。不会有营销邮件，只发有变化的，一键退订。</div><p class="lead" style="margin-top:12px">等不及可以先发邮件到 <a href="mailto:hello@sinanlab.com?subject=subscribe" style="color:var(--p-ink)">hello@sinanlab.com</a> 写"订阅"，接通那天我们手动加你。</p></section></div>""" % (C, C, C, BASE), "subscribe.html")
 
-for fn,title,body in [
- ("disclosure.html","返佣披露 · Sinan Lab",'<div class="eyebrow">返佣披露</div><h2 class="big">目前：<em>零返佣、零广告、零赞助。</em></h2><div class="prose"><p class="lead">截至本页最后更新，本站所有页面不含任何返佣链接、广告位或赞助内容，未从任何被测渠道或第三方获得收入。</p><h3>若将来接入</h3><p>只会来自上游官方平台，绝不来自任何被测量的中转渠道；含返佣的位置显著标明"广告"；排序与判读永不读取返佣字段；每季度在本页公开收入来源占比。</p><p style="color:var(--ink3);font-size:13px">最后更新：2026-09-02</p></div>'),
- ("privacy.html","隐私政策 · Sinan Lab",'<div class="eyebrow">隐私政策</div><h2 class="big">我们几乎<em>不收集</em>什么。</h2><div class="prose"><p class="lead">所有数据不登录也全部可见；不使用 Cookie 追踪；统计使用无 Cookie 的 Cloudflare Web Analytics。</p><h3>账号（可选）</h3><p>登录只解锁关注、提醒、纠错提交等个人化功能。我们不设密码、不存密码。用 GitHub 登录时，我们保存你的 GitHub 用户编号、用户名、头像地址，以及 GitHub 提供的邮箱（用于将来发提醒；查找时只用邮箱的哈希值）。登录状态存在一个名为 sinan_sid 的 Cookie 里，作用域为 sinanlab.com 及其子域，30 天有效，仅服务器可读。</p><h3>你在站内留下的东西</h3><p>关注列表、提醒设置、你提交的纠错。这些只对你自己和站点维护者可见。想删除账号及全部数据，发邮件到 hello@sinanlab.com，我们在 7 天内处理。</p><h3>邮箱</h3><p>仅用于你订阅或开启的提醒，单独存放、不与浏览数据关联，随时一键退订。</p><h3>出站跳转</h3><p>点击"前往站点"经本站中转，仅按天按站累计点击次数，不记录 IP、浏览器标识或来源页。</p><h3>你的 Key</h3><p>任何"用我的 Key 核实"的功能都在你的浏览器本地运行，Key 不上传、不落库、不经过我们的服务器。</p><h3>统计</h3><p>后台只看无个人信息的计数：每日登录数、注册数、关注数、出站点击数。</p><p style="color:var(--ink3);font-size:13px">最后更新：2026-09-03 · 联系 hello@sinanlab.com</p></div>'),
- ("disclaimer.html","免责声明 · Sinan Lab",'<div class="eyebrow">免责声明</div><h2 class="big">我们给事实，<em>不给推荐。</em></h2><div class="prose"><p class="lead">本站所有比率、判读均为基于公开信息的算术结果，不构成对任何渠道的指控，也不构成购买建议；不排除存在本站未收录的更低公开来源。</p><h3>数据时效</h3><p>每条数据均标注抓取时间与快照；渠道价格可能随时变化，以渠道方实时展示为准。</p><h3>第三方渠道</h3><p>本站不运营、不担保任何第三方服务。中转渠道存在日志留存、能力裁剪、限流、关站、余额失效及上游合规等风险，请自行评估。</p><h3>更正</h3><p>数据错误请联系 hello@sinanlab.com；我们公开更正并保留原记录。</p><p style="color:var(--ink3);font-size:13px">最后更新：2026-09-02</p></div>'),
+for fn, title, body in [
+    ("disclosure.html", "返佣披露 · Sinan Lab", u'<div class="rise" style="--i:0;margin-bottom:14px"><div class="eyebrow">返佣披露</div><h1 style="font-size:30px;margin-top:8px">目前：零返佣、零广告、零赞助</h1></div><section class="card pad prose rise" style="--i:1"><p>截至本页最后更新，本站所有页面不含任何返佣链接、广告位或赞助内容，未从任何被测渠道或第三方获得收入。所有"前往站点"链接不带推广参数，只计点击数。</p><h3>若将来接入</h3><p>只会来自上游官方平台，绝不来自任何被测量的中转渠道；含返佣的位置显著标明"广告"并使用 rel=sponsored；排序与判读永不读取返佣字段；每季度在本页公开收入来源占比。返佣总开关在后台，默认关闭，每次开关都记入审计日志。</p><p style="color:var(--ink-3);font-size:13px">最后更新：2026-09-04</p></section>'),
+    ("privacy.html", "隐私政策 · Sinan Lab", u'<div class="rise" style="--i:0;margin-bottom:14px"><div class="eyebrow">隐私政策</div><h1 style="font-size:30px;margin-top:8px">我们几乎不收集什么</h1></div><section class="card pad prose rise" style="--i:1"><p>所有数据不登录也全部可见；不使用 Cookie 追踪；统计使用无 Cookie 的 Cloudflare Web Analytics。</p><h3>账号（可选）</h3><p>登录只解锁关注、提醒、纠错提交等个人化功能。我们不设密码、不存密码。用 GitHub 登录时，我们保存你的 GitHub 用户编号、用户名、头像地址，以及 GitHub 提供的邮箱（用于将来发提醒；查找时只用邮箱的哈希值）。登录状态存在一个名为 sinan_sid 的 Cookie 里，作用域为 sinanlab.com 及其子域，30 天有效，仅服务器可读。</p><h3>你在站内留下的东西</h3><p>关注列表、提醒设置、你提交的纠错。这些只对你自己和站点维护者可见。想删除账号及全部数据，发邮件到 hello@sinanlab.com，我们在 7 天内处理。</p><h3>邮箱</h3><p>仅用于你订阅或开启的提醒，单独存放、不与浏览数据关联，随时一键退订。</p><h3>出站跳转</h3><p>点击"前往站点"经本站中转，仅按天按站累计点击次数，不记录 IP、浏览器标识或来源页。</p><h3>你的 Key</h3><p>任何"用我的 Key 核实"的功能都在你的浏览器本地运行，Key 不上传、不落库、不经过我们的服务器。</p><h3>统计</h3><p>后台只看无个人信息的计数：每日登录数、注册数、关注数、出站点击数。</p><p style="color:var(--ink-3);font-size:13px">最后更新：2026-09-03 · 联系 hello@sinanlab.com</p></section>'),
+    ("disclaimer.html", "免责声明 · Sinan Lab", u'<div class="rise" style="--i:0;margin-bottom:14px"><div class="eyebrow">免责声明</div><h1 style="font-size:30px;margin-top:8px">我们给事实，不给推荐</h1></div><section class="card pad prose rise" style="--i:1"><p>本站所有比率、判读均为基于公开信息的算术结果，不构成对任何渠道的指控，也不构成购买建议；不排除存在本站未收录的更低公开来源。</p><h3>数据时效</h3><p>每条数据均标注抓取时间与快照；渠道价格可能随时变化，以渠道方实时展示为准。</p><h3>第三方渠道</h3><p>本站不运营、不担保任何第三方服务。中转渠道存在日志留存、能力裁剪、限流、关站、余额失效及上游合规等风险，请自行评估。</p><h3>更正</h3><p>数据错误请联系 hello@sinanlab.com；我们公开更正并保留原记录。</p><p style="color:var(--ink-3);font-size:13px">最后更新：2026-09-02</p></section>'),
 ]:
-    page(fn,title,"司南实验室 · "+title.split(" ·")[0],body,"")
-io.open(os.path.join(OUT,"robots.txt"),"w").write("User-agent: *\nAllow: /\nSitemap: https://sinanlab.com/sitemap.xml\n")
-io.open(os.path.join(OUT,"sitemap.xml"),"w").write('<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n'+"".join("  <url><loc>https://sinanlab.com/%s</loc></url>\n" % ("" if f=="index.html" else f.replace(".html","")) for f in ["index.html","constitution.html","about.html","subscribe.html","disclosure.html","privacy.html","disclaimer.html"])+"</urlset>\n")
-io.open(os.path.join(OUT,"favicon.svg"),"w").write('<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 40 40"><rect width="40" height="40" rx="8" fill="#0B0F14"/><circle cx="20" cy="20" r="14" fill="none" stroke="#2A3644" stroke-width="1.5"/><path d="M20 9 L24.5 20 L20 31 Z" fill="#4FD1D9"/><path d="M20 9 L15.5 20 L20 31 Z" fill="#2A3644"/><circle cx="20" cy="20" r="2.2" fill="#0B0F14" stroke="#4FD1D9" stroke-width="1.4"/></svg>')
-io.open(os.path.join(OUT,"_redirects"),"w").write("https://www.sinanlab.com/* https://sinanlab.com/:splat 301\n")
-print("母站生成：", sorted(os.listdir(OUT)))
+    page(fn, title, "司南实验室 · " + title.split(" ·")[0] + "：不收被测渠道的钱、每个数字带来源、只给事实不给推荐。", body, "")
+page("404.html", "没有这个页面 · Sinan Lab", "页面不存在", u'<section class="card pad rise" style="max-width:640px"><div class="eyebrow">404</div><h1 style="font-size:28px;margin-top:8px">没有这个页面。</h1><p class="lead">地址可能拼错了，或者这一页已经搬走。</p><div style="margin-top:16px;display:flex;gap:10px;flex-wrap:wrap"><a class="btn p" href="/">回首页</a><a class="btn o" href="%s">去 Sinan Compute</a><a class="btn o" href="%s">去 Sinan Robo</a></div></section>' % (C, R), "")
 
-page("404.html","没有这个页面 · Sinan Lab","页面不存在",'<div class="eyebrow">404</div><h2 class="big">没有这个页面。</h2><p style="color:var(--ink2);margin-top:14px">地址可能拼错了，或者这一页已经搬走。<a href="/" style="color:var(--accent)">回首页</a> · <a href="https://compute.sinanlab.com" style="color:var(--accent)">去 Sinan Compute</a></p>',"")
+io.open(os.path.join(OUT, "robots.txt"), "w").write("User-agent: *\nAllow: /\nSitemap: %s/sitemap.xml\n" % BASE)
+io.open(os.path.join(OUT, "sitemap.xml"), "w").write('<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n' + "".join('  <url><loc>%s/%s</loc><lastmod>%s</lastmod></url>\n' % (BASE, "" if f == "index.html" else f.replace(".html", ""), GEN) for f in ["index.html", "constitution.html", "about.html", "subscribe.html", "disclosure.html", "privacy.html", "disclaimer.html"]) + "</urlset>\n")
+io.open(os.path.join(OUT, "favicon.svg"), "w").write('<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 40 40"><rect width="40" height="40" rx="10" fill="#4B36D6"/><circle cx="20" cy="20" r="14" fill="none" stroke="#B9ADFF" stroke-width="1.5" opacity=".6"/><path d="M20 9 L24.5 20 L20 31 Z" fill="#fff"/><path d="M20 9 L15.5 20 L20 31 Z" fill="#B9ADFF"/><circle cx="20" cy="20" r="2.2" fill="#4B36D6" stroke="#fff" stroke-width="1.4"/></svg>')
+io.open(os.path.join(OUT, "_redirects"), "w").write("https://www.sinanlab.com/* https://sinanlab.com/:splat 301\n")
+io.open(os.path.join(OUT, "_headers"), "w").write("/*\n  X-Content-Type-Options: nosniff\n  Referrer-Policy: strict-origin-when-cross-origin\n/fonts/*\n  Cache-Control: public, max-age=31536000, immutable\n/img/*\n  Cache-Control: public, max-age=2592000\n")
+print("母站 v5 生成：", sorted(x for x in os.listdir(OUT) if x.endswith(".html")))
