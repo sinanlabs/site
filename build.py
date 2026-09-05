@@ -120,7 +120,7 @@ def page(fn, title, desc, body, active="", og="/img/og.png", jsonld=None, script
     html = u"""<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>%s</title><meta name="description" content="%s"><link rel="canonical" href="%s/%s"><meta property="og:site_name" content="Sinan Lab"><meta property="og:type" content="website"><meta property="og:title" content="%s"><meta property="og:description" content="%s"><meta property="og:url" content="%s/%s"><meta property="og:image" content="%s%s"><meta name="twitter:card" content="summary_large_image"><meta name="twitter:image" content="%s%s"><link rel="icon" href="/favicon.svg" type="image/svg+xml"><meta name="theme-color" content="#040611"><link rel="alternate" type="application/rss+xml" title="Sinan Compute 价格变动" href="%s/feed.xml">%s<style>%s</style></head><body>
 <header class="top"><div class="wrap bar"><a class="brand" href="/"><span class="mark"></span><div><b>Sinan Lab</b><small>司南实验室 · AI 基础设施的中立测量者</small></div></a><nav class="main">%s</nav><div class="right"><a class="pl c" href="%s"><span class="d"></span><span>Sinan Compute</span></a><a class="pl r" href="%s"><span class="d"></span><span>Sinan Robo</span></a><span class="auth" id="auth"></span></div></div></header>
 <main><div class="wrap">%s</div></main>
-<footer class="ft"><div class="wrap in"><span>© 2026 Sinan Lab · 司南实验室</span><a href="/constitution">为什么可信</a><a href="/disclosure">收入透明</a><a href="/privacy">隐私政策</a><a href="/disclaimer">免责声明</a><a href="%s/method">方法论与数据</a><a href="%s/feed.xml">RSS</a><a href="mailto:hello@sinanlab.com">hello@sinanlab.com</a><span style="margin-left:auto">每个数字可追溯来源 · 不收任何被测渠道的钱</span></div></footer>
+<footer class="ft"><div class="wrap in"><span>© 2026 Sinan Lab · 司南实验室</span><a href="/constitution">为什么可信</a><a href="/disclosure">收入透明</a><a href="https://github.com/sinanlabs" rel="noopener">GitHub</a><a href="/privacy">隐私政策</a><a href="/disclaimer">免责声明</a><a href="%s/method">方法论与数据</a><a href="%s/feed.xml">RSS</a><a href="mailto:hello@sinanlab.com">hello@sinanlab.com</a><span style="margin-left:auto">每个数字可追溯来源 · 不收任何被测渠道的钱</span></div></footer>
 <script>(function(){var b=document.getElementById("auth");if(!b)return;fetch("%s/api/me",{credentials:"include"}).then(function(r){return r.json();}).then(function(m){if(m&&m.user){b.innerHTML='<a href="%s/me" title="我的关注">'+(m.user.avatar_url?'<img src="'+m.user.avatar_url+'" alt="">':'我的')+'</a>';}else if(m&&m.login){b.innerHTML='<a class="pl" href="%s/api/auth/github/start?return_to='+encodeURIComponent(location.href)+'">GitHub 登录</a>';}}).catch(function(){});})();</script>%s</body></html>""" % (
         esc(title), esc(desc), BASE, path, esc(title), esc(desc), BASE, path, C if og.startswith("/img") else BASE, og, C if og.startswith("/img") else BASE, og, C, ld, CSS, nav, C, R, body, C, C, C, C, C, scripts)
     io.open(os.path.join(OUT, fn), "w", encoding="utf-8").write(html)
@@ -128,7 +128,9 @@ def page(fn, title, desc, body, active="", og="/img/og.png", jsonld=None, script
 # ---------------- 首页 ----------------
 st = D["stats"]; CL = st["clusters"]
 # 行情板：最新两代里有报价最多的 8 个模型
-board_models = sorted([m for m in D["models"] if m["is_latest"]], key=lambda m: -m["n_relay"])[:8]
+# 行情板：最新两代的全部模型（按厂商归组、版本高的在前、同版本按在卖站数），最多 16 行；保证 Fable 5.1 / GPT-6 这类新旗舰不会被销量老将挤掉
+_vorder = ["anthropic", "openai", "google", "deepseek", "xai", "moonshot", "zhipu", "alibaba", "minimax"]
+board_models = sorted([m for m in D["models"] if m["is_latest"] and m["n_relay"] >= 3], key=lambda m: (_vorder.index(m["vendor"]) if m["vendor"] in _vorder else 99, -m["n_relay"]))[:16]
 def best_row(m):
     ok = [r for r in m["rows"] if not r["held"] and r["band"] in ("explainable", "normal")]
     return min(ok, key=lambda r: r["out"]) if ok else None
@@ -161,7 +163,7 @@ home = u"""
 
 <div class="kpis">%s</div>
 
-<section class="card board rise" style="--i:4"><div class="bh"><div><h2 class="sec">今天的行情板</h2><p class="lead">最新两代里在卖最多的 %d 个模型：参考价、说得通的最低实付是谁给的、多少家低于成本下限。点模型名看全部中转站。</p></div><span class="r">数据 %s · USD/CNY %.2f</span></div>
+<section class="card board rise" style="--i:4"><div class="bh"><div><h2 class="sec">今天的行情板</h2><p class="lead">最新两代的 %d 个模型：参考价、说得通的最低实付是谁给的、多少家低于成本下限。点模型名看全部中转站。</p></div><span class="r">数据 %s · USD/CNY %.2f</span></div>
 <div class="tablewrap"><table><thead><tr><th>模型</th><th class="num">参考价 $/百万输出</th><th class="num">说得通的最低实付</th><th>是参考价的几成</th><th class="num">低于成本下限</th><th class="num"></th></tr></thead><tbody>%s</tbody></table></div>
 <div class="tfoot"><span>参考价 = 官方与公开市场最低；实付 = 面板名义价 × 充值比例 ÷ 汇率；"说得通" = 落在常见批量折扣区间。此为算术比值，不构成对任何渠道的指控。</span></div></section>
 
