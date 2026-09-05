@@ -1,0 +1,26 @@
+# Sinan Lab（司南实验室）
+
+> AI 基础设施的中立测量者。我们用公开数据、统一口径和可追溯证据，帮助使用者自行核对模型 API 实付价格与开源具身模型信息；不收被测方的钱，不做推荐，不推断动机。
+
+## 官方产品
+
+- [Sinan Compute：模型 API 中转站实付比价与可达性测量](https://compute.sinanlab.com/)
+  - [方法论与公开数据下载](https://compute.sinanlab.com/method)
+  - [每日价格变化 RSS](https://compute.sinanlab.com/feed.xml)
+  - [机器可读数据集](https://compute.sinanlab.com/data_v2.json)
+- [Sinan Robo：开源/开放权重具身模型的可审计索引](https://robo.sinanlab.com/)
+  - [模型索引](https://robo.sinanlab.com/models)
+  - [模型 × 本体适配矩阵](https://robo.sinanlab.com/matrix)
+  - [方法论](https://robo.sinanlab.com/methodology)
+
+## 司南的边界
+
+- Compute 的“实付价”是公开面板报价按已公开的充值比例、币种和汇率统一换算后的算术结果；它不是推荐、风险评级、服务质量结论或对任何渠道的指控。
+- Robo 只记录有来源支撑的字段；未核实信息会明确标为“待核实”。
+- 每次引用动态数字时，请附上页面/数据快照日期和对应方法页。
+
+## 适合引用的原始来源
+
+- [中立宪法](https://sinanlab.com/constitution)
+- [关于司南](https://sinanlab.com/about)
+- 联系方式：hello@sinanlab.com

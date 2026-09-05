@@ -22,6 +22,8 @@ for d_ in ("img",):
     src = os.path.join(COMPASS, d_)
     if os.path.exists(src): shutil.copytree(src, os.path.join(OUT, d_), dirs_exist_ok=True)
 os.makedirs(os.path.join(OUT, "assets"), exist_ok=True)
+if os.path.exists(os.path.join(HERE, "static")):   # 站长平台验证文件等原样放根目录
+    for f in os.listdir(os.path.join(HERE, "static")): shutil.copy(os.path.join(HERE, "static", f), os.path.join(OUT, f))
 if os.path.exists(os.path.join(COMPASS, "dist", "assets", "earth.js")): shutil.copy(os.path.join(COMPASS, "dist", "assets", "earth.js"), os.path.join(OUT, "assets", "earth.js"))
 
 CSS = r"""
@@ -37,10 +39,10 @@ header.top{position:sticky;top:0;z-index:20;background:rgba(242,243,249,.82);bac
 .bar{display:flex;align-items:center;gap:22px;height:64px}
 .brand{display:flex;align-items:center;gap:11px}.brand .mark{width:34px;height:34px;border-radius:11px;background:linear-gradient(145deg,#8B77FF,#4B36D6);box-shadow:0 8px 18px -8px rgba(75,54,214,.7),inset 0 1px 0 rgba(255,255,255,.35);position:relative;flex:none}
 .brand .mark:after{content:"";position:absolute;inset:9px 12px;border-radius:2px 2px 8px 8px;background:linear-gradient(#fff,#E9E6FF);transform:rotate(-28deg);box-shadow:0 2px 4px rgba(0,0,0,.25)}
-.brand b{font-size:17px;font-weight:700;letter-spacing:-.01em;display:block;line-height:1.1}.brand small{display:block;font-size:10.5px;color:var(--ink-3);letter-spacing:.06em;margin-top:2px}
-nav.main{display:flex;gap:4px;margin-left:12px}nav.main a{padding:8px 12px;border-radius:10px;color:var(--ink-2);font-weight:500;font-size:14px}nav.main a:hover{background:var(--card);color:var(--ink)}nav.main a.on{color:var(--ink);background:var(--card);box-shadow:var(--shadow-1)}
+.brand b{font-size:17px;font-weight:700;letter-spacing:-.01em;display:block;line-height:1.1}.brand small{display:block;font-size:10.5px;color:var(--ink-3);letter-spacing:.06em;margin-top:2px;white-space:nowrap}
+nav.main{display:flex;gap:4px;margin-left:12px}nav.main a{padding:8px 12px;border-radius:10px;color:var(--ink-2);font-weight:500;font-size:14px;white-space:nowrap}nav.main a:hover{background:var(--card);color:var(--ink)}nav.main a.on{color:var(--ink);background:var(--card);box-shadow:var(--shadow-1)}
 .right{margin-left:auto;display:flex;gap:8px;align-items:center}
-.pl{display:inline-flex;align-items:center;gap:8px;padding:6px 12px;border-radius:999px;border:1px solid var(--hair-2);background:var(--card);font-size:13px;font-weight:600}.pl .d{width:8px;height:8px;border-radius:50%}
+.pl{display:inline-flex;align-items:center;gap:8px;padding:6px 12px;border-radius:999px;border:1px solid var(--hair-2);background:var(--card);font-size:13px;font-weight:600;white-space:nowrap}.right .lang,.right .auth{white-space:nowrap}.brand{flex:none}.pl .d{width:8px;height:8px;border-radius:50%}
 .pl.c .d{background:var(--p)}.pl.r .d{background:var(--robo)}
 .auth img{width:28px;height:28px;border-radius:50%;border:1px solid var(--hair)}
 main{padding:22px 0 80px}
@@ -97,18 +99,20 @@ td.num,th.num{text-align:right;font-family:var(--mono);font-variant-numeric:tabu
 .why{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:14px}.why .it{padding:16px 18px;border:1px solid var(--hair);border-radius:14px;background:#FBFBFE}.why .it b{display:block;font-size:14px}.why .it span{font-size:13px;color:var(--ink-2)}
 .btn{display:inline-flex;align-items:center;gap:8px;height:42px;padding:0 18px;border-radius:12px;border:0;cursor:pointer;font-weight:600;font-size:13.5px;transition:transform .35s var(--spring)}.btn:hover{transform:translateY(-2px)}
 .btn.p{background:var(--p);color:#fff;box-shadow:0 10px 22px -12px rgba(75,54,214,.9)}.btn.o{background:var(--card);color:var(--ink);border:1px solid var(--hair-2)}.btn.w{background:#fff;color:var(--p-deep)}.btn.g{background:rgba(255,255,255,.08);color:#fff;border:1px solid rgba(255,255,255,.3)}
-.law{counter-reset:c;list-style:none;padding:0;margin:14px 0 0;display:grid;grid-template-columns:repeat(2,1fr);gap:12px}.law li{display:grid;grid-template-columns:40px 1fr;gap:12px;padding:16px 18px;border:1px solid var(--hair);border-radius:14px;background:#FBFBFE}.law li:before{counter-increment:c;content:counter(c,decimal-leading-zero);font-family:var(--mono);color:var(--p);font-size:12px;padding-top:3px}.law b{display:block;font-size:14.5px;margin-bottom:3px}.law span{color:var(--ink-2);font-size:13px}
+.law{counter-reset:c;list-style:none;padding:0;margin:14px 0 0;display:grid;grid-template-columns:repeat(2,1fr);gap:12px}.law li{display:grid;grid-template-columns:40px 1fr;gap:12px;padding:16px 18px;border:1px solid var(--hair);border-radius:14px;background:#FBFBFE}.law li:before{counter-increment:c;content:counter(c,decimal-leading-zero);font-family:var(--mono);color:var(--p);font-size:12px;padding-top:3px}.law b{display:block;font-size:14.5px;margin-bottom:3px}.law span{color:var(--ink-2);font-size:13px;grid-column:2}
 .prose{max-width:780px;font-size:15px;line-height:1.85}.prose h1{font-size:30px;margin:0 0 8px}.prose h2{font-size:20px;margin:28px 0 8px}.prose h3{font-size:16px;margin:20px 0 6px}.prose p{margin:8px 0;color:var(--ink-2)}.prose ul{padding-left:20px;color:var(--ink-2)}.prose a{color:var(--p-ink);text-decoration:underline;text-decoration-color:var(--hair-2)}
 .notice{border:1px solid #F5C87A;background:var(--warn-soft);border-radius:12px;padding:12px 16px;color:#7A4B00;font-size:13.5px}
 .two{display:grid;grid-template-columns:1fr 1fr;gap:14px}.box{padding:18px 20px;border:1px solid var(--hair);border-radius:14px;background:#FBFBFE}.box h3{font-size:15px;margin-bottom:8px}.box ul{margin:0;padding-left:18px;color:var(--ink-2);font-size:13.5px}.box.ok{border-color:#9ADBB9}.box.no{border-color:#F5A9A3}
 footer.ft{border-top:1px solid var(--hair);margin-top:60px}footer.ft .in{display:flex;flex-wrap:wrap;gap:16px 20px;padding:22px 0;font-size:12.5px;color:var(--ink-3)}footer.ft a{color:var(--ink-3)}footer.ft a:hover{color:var(--ink)}
 .rise{animation:rise .8s var(--ease) both;animation-delay:calc(var(--i,0)*70ms)}@keyframes rise{from{opacity:0;transform:translateY(18px) scale(.985)}}
 @media (prefers-reduced-motion:reduce){*,*:before,*:after{animation-duration:.01ms!important;transition-duration:.01ms!important}}
+@media (max-width:1360px){.brand small{display:none}.bar{gap:14px}}
+@media (max-width:1180px){.pl span{display:none}nav.main a{padding:8px 9px}}
 @media (max-width:1100px){.kpis{grid-template-columns:repeat(3,1fr)}.why{grid-template-columns:1fr}.law{grid-template-columns:1fr}}
 @media (max-width:860px){nav.main{display:none}.hero{min-height:620px}.hero .txt{padding:28px 24px 30px;max-width:none}.hero h1{font-size:34px}.hero .scrim{background:linear-gradient(180deg,rgba(4,6,17,.8) 0%,rgba(4,6,17,.35) 55%,transparent 80%)}.hero .stat,.hero .tag{display:none}.prods,.grid2,.two{grid-template-columns:1fr}.kpis{grid-template-columns:1fr 1fr}.prod h3,.prod p{max-width:none}.pl span{display:none}}
 """
 
-NAV = [("/", "首页", "index.html"), ("/constitution", "中立宪法", "constitution.html"), ("/about", "关于", "about.html"), ("/subscribe", "订阅", "subscribe.html")]
+NAV = [("/", "首页", "index.html"), ("/constitution", "为什么可信", "constitution.html"), ("/about", "关于", "about.html"), ("/subscribe", "订阅", "subscribe.html")]
 def page(fn, title, desc, body, active="", og="/img/og.png", jsonld=None, scripts=""):
     nav = "".join('<a href="%s"%s>%s</a>' % (h, ' class="on"' if f == active else "", t) for h, t, f in NAV)
     path = "" if fn == "index.html" else fn.replace(".html", "")
@@ -116,7 +120,7 @@ def page(fn, title, desc, body, active="", og="/img/og.png", jsonld=None, script
     html = u"""<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>%s</title><meta name="description" content="%s"><link rel="canonical" href="%s/%s"><meta property="og:site_name" content="Sinan Lab"><meta property="og:type" content="website"><meta property="og:title" content="%s"><meta property="og:description" content="%s"><meta property="og:url" content="%s/%s"><meta property="og:image" content="%s%s"><meta name="twitter:card" content="summary_large_image"><meta name="twitter:image" content="%s%s"><link rel="icon" href="/favicon.svg" type="image/svg+xml"><meta name="theme-color" content="#040611"><link rel="alternate" type="application/rss+xml" title="Sinan Compute 价格变动" href="%s/feed.xml">%s<style>%s</style></head><body>
 <header class="top"><div class="wrap bar"><a class="brand" href="/"><span class="mark"></span><div><b>Sinan Lab</b><small>司南实验室 · AI 基础设施的中立测量者</small></div></a><nav class="main">%s</nav><div class="right"><a class="pl c" href="%s"><span class="d"></span><span>Sinan Compute</span></a><a class="pl r" href="%s"><span class="d"></span><span>Sinan Robo</span></a><span class="auth" id="auth"></span></div></div></header>
 <main><div class="wrap">%s</div></main>
-<footer class="ft"><div class="wrap in"><span>© 2026 Sinan Lab · 司南实验室</span><a href="/constitution">中立宪法</a><a href="/disclosure">返佣披露</a><a href="/privacy">隐私政策</a><a href="/disclaimer">免责声明</a><a href="%s/method">方法论与数据</a><a href="%s/feed.xml">RSS</a><a href="mailto:hello@sinanlab.com">hello@sinanlab.com</a><span style="margin-left:auto">每个数字可追溯来源 · 不收任何被测渠道的钱</span></div></footer>
+<footer class="ft"><div class="wrap in"><span>© 2026 Sinan Lab · 司南实验室</span><a href="/constitution">为什么可信</a><a href="/disclosure">收入透明</a><a href="/privacy">隐私政策</a><a href="/disclaimer">免责声明</a><a href="%s/method">方法论与数据</a><a href="%s/feed.xml">RSS</a><a href="mailto:hello@sinanlab.com">hello@sinanlab.com</a><span style="margin-left:auto">每个数字可追溯来源 · 不收任何被测渠道的钱</span></div></footer>
 <script>(function(){var b=document.getElementById("auth");if(!b)return;fetch("%s/api/me",{credentials:"include"}).then(function(r){return r.json();}).then(function(m){if(m&&m.user){b.innerHTML='<a href="%s/me" title="我的关注">'+(m.user.avatar_url?'<img src="'+m.user.avatar_url+'" alt="">':'我的')+'</a>';}else if(m&&m.login){b.innerHTML='<a class="pl" href="%s/api/auth/github/start?return_to='+encodeURIComponent(location.href)+'">GitHub 登录</a>';}}).catch(function(){});})();</script>%s</body></html>""" % (
         esc(title), esc(desc), BASE, path, esc(title), esc(desc), BASE, path, C if og.startswith("/img") else BASE, og, C if og.startswith("/img") else BASE, og, C, ld, CSS, nav, C, R, body, C, C, C, C, C, scripts)
     io.open(os.path.join(OUT, fn), "w", encoding="utf-8").write(html)
@@ -178,7 +182,7 @@ home = u"""
 <li><b>排名与判读永不含商业变量</b><span>有返佣与无返佣的渠道同等收录、同等展示；算法里没有佣金这个字段。</span></li>
 <li><b>每个数字带证据</b><span>来源 URL、抓取时间、原始快照哈希，永不覆盖。算错了公开更正，原记录保留。</span></li>
 <li><b>只说算术，不说人</b><span>"在无补贴假设下数学上不可持续"是算术；指控性词汇在发布管线里被拦下，不靠自觉。</span></li>
-</ol><p style="margin-top:12px;font-size:13px;color:var(--ink-3)">全文见 <a href="/constitution" style="color:var(--p-ink)">中立宪法</a> · 原始数据在 <a href="%s/method#data" style="color:var(--p-ink)">这里下载</a></p></section>
+</ol><p style="margin-top:12px;font-size:13px;color:var(--ink-3)">全文见 <a href="/constitution" style="color:var(--p-ink)">为什么可信</a> · 原始数据在 <a href="%s/method#data" style="color:var(--p-ink)">这里下载</a></p></section>
 """ % (st["confirmed"], C, C, C, next((m["n_relay"] for m in D["models"] if m["id"] == "deepseek-v4-pro"), 0), C, R, format(st["quotes"], ","), st["confirmed"], len(robo_models), kpi_html, len(board_models), GEN, D["fx"]["rate"], board,
        C, st["confirmed"], format(st["quotes"], ","), sum(len(MEDIA.get(k, [])) for k in ("video", "image")), CL["ultra"], CL["held"], R, len(robo_models), len(ROBOD.get("embodiments", [])), robo_ok, robo_nc,
        C, BASE, C, feed, C, C, C)
@@ -187,19 +191,19 @@ ld_home = [{"@context": "https://schema.org", "@type": "Organization", "name": "
 page("index.html", "Sinan Lab · 司南实验室 —— 看清算力，才好买算力", "司南实验室：%d 个模型 API 中转站的实付比价与可达性测量，%d 个开源具身模型的可审计索引。每个数字带来源，不收任何被测渠道的钱，不推荐。" % (st["confirmed"], len(robo_models)), home, "index.html", jsonld=ld_home, scripts='<script src="/assets/earth.js?v=%s" defer></script>' % GEN.replace("-", ""))
 
 # ---------------- 其他页 ----------------
-page("constitution.html", "中立宪法 · Sinan Lab", "司南实验室的中立宪法与措辞宪法全文：不收被测者的钱、排名不含商业变量、每个数字带证据、只说算术不说人、方法与收入公开。", u"""
-<div class="rise" style="--i:0;margin-bottom:14px"><div class="eyebrow">中立宪法 · 不可协商</div><h1 style="font-size:30px;margin-top:8px">五条写进网站、写进代码的约束</h1><p class="lead">这不是价值宣言，是产品的运行规则。其中第一、五条已经是代码：排序函数里没有佣金字段；发布管线里有一道禁用词闸门，命中就不部署。</p></div>
+page("constitution.html", "为什么可信 · Sinan Lab", "司南实验室对用户的五条承诺：不收被测方一分钱、排名不含商业变量、每个数字可追溯出处、只讲算术不讲情绪、方法与收入公开。", u"""
+<div class="rise" style="--i:0;margin-bottom:14px"><div class="eyebrow">为什么可信 · 我们对你的五条承诺</div><h1 style="font-size:30px;margin-top:8px">不收被测方一分钱，每个数字都能查到出处</h1><p class="lead">这五条不是口号，是写进代码的运行规则：排序函数里没有佣金字段，发布管线有禁用词闸门，命中就发不出去。你看到的每一个价格、每一条结论，都可以自己点开验证。</p></div>
 <section class="card pad rise" style="--i:1"><ol class="law">
-<li><b>排名与推荐算法永不含佣金变量</b><span>有返佣与无返佣渠道同等收录、同等展示。任何含返佣的位置按《互联网广告管理办法》显著标明"广告"。</span></li>
-<li><b>不做付费认证</b><span>任何受托测试只收执行费，结果绝不冠以"独立认证"名义。</span></li>
-<li><b>不接受被测量渠道的任何资金</b><span>广告、赞助、返佣，一律不得进入质量测量层页面。</span></li>
-<li><b>每季度公开收入来源占比</b><span>修正日志与方法论版本永久公开。</span></li>
-<li><b>证据先于结论</b><span>展示层任何数字都必须能追回一条原始快照；追不回的不予显示。这条在数据库层是断言，不是约定。</span></li>
+<li><b>排名里永远没有商业变量</b><span>有没有和我们合作，对一个渠道的排序和展示毫无影响。任何带推广的位置都会显著标注"广告"，符合《互联网广告管理办法》。</span></li>
+<li><b>不做付费认证</b><span>任何委托测试只收执行费，结果不会被冠以"独立认证"。你看到的"一致"或"不一致"，买不来。</span></li>
+<li><b>不收被测方的钱</b><span>广告、赞助、返佣，一律不进入测量页面。目前全站零返佣、零广告、零赞助。</span></li>
+<li><b>收入来源按季公开</b><span>每季度公布收入构成；修正日志和方法论版本永久公开，改过什么一目了然。</span></li>
+<li><b>先有证据，再有结论</b><span>页面上任何数字都能追回一条原始抓取快照，追不回的不显示。这在数据库层面是硬约束，不是自觉。</span></li>
 </ol></section>
-<section class="card pad rise" style="margin-top:16px;--i:2"><h2 class="sec">措辞宪法</h2><div class="two" style="margin-top:12px">
-<div class="box ok"><h3>可以这么写</h3><ul><li>"该端点输出分布与参考端点统计不一致（置信度 92%，n=1,240，2026-08 窗口）"</li><li>"该渠道对该模型的实付价为最低公开渠道价的 7.5%，在无补贴假设下数学上不可持续"</li><li>"本次测量未能复现上月结论，原因待查"</li></ul></div>
-<div class="box no"><h3>永不这么写</h3><ul><li>"实锤""假模型""套壳""诈骗""降智"</li><li>任何不带样本量与时间窗的质量结论</li><li>任何形式的"推荐榜"。我们给事实清单，判断权交回给你</li></ul></div></div>
-<p class="lead" style="margin-top:12px">所有质量类结论必须同时带样本量、时间窗、置信度三个字段，缺一个发布管线直接拦下。具名发布前有 72 小时预通知与申诉窗口；同一结论须在两个独立时间窗复现。</p></section>""", "constitution.html")
+<section class="card pad rise" style="margin-top:16px;--i:2"><h2 class="sec">我们怎么说话</h2><div class="two" style="margin-top:12px">
+<div class="box ok"><h3>我们会这样写</h3><ul><li>"该端点输出分布与参考端点统计不一致（置信度 92%，n=1,240，2026-08 窗口）"</li><li>"该渠道对该模型的实付价为最低公开渠道价的 7.5%，在无补贴假设下数学上不可持续"</li><li>"本次测量未能复现上月结论，原因待查"</li></ul></div>
+<div class="box no"><h3>我们不会这样写</h3><ul><li>"实锤""假模型""套壳""诈骗""降智"</li><li>任何不带样本量与时间窗的质量结论</li><li>任何形式的"推荐榜"。我们给事实清单，判断权交回给你</li></ul></div></div>
+<p class="lead" style="margin-top:12px">所有质量类结论必须带样本量、时间窗、置信度，缺一个发布管线直接拦下。点名发布前给渠道方 72 小时预通知与申诉窗口；同一结论要在两个独立时间窗复现才发。</p></section>""", "constitution.html")
 
 page("about.html", "关于 · Sinan Lab", "司南实验室是一个一人加 AI 的小团队，做 AI 基础设施的中立测量：算力与模型渠道（Sinan Compute）、具身智能模型（Sinan Robo）。", u"""
 <div class="rise" style="--i:0;margin-bottom:14px"><div class="eyebrow">关于</div><h1 style="font-size:30px;margin-top:8px">一个中立的测量者，不是导航站</h1></div>
@@ -213,10 +217,11 @@ page("subscribe.html", "订阅 · Sinan Lab", "订阅司南实验室：价格变
 <div class="rise" style="--i:0;margin-bottom:14px"><div class="eyebrow">订阅</div><h1 style="font-size:30px;margin-top:8px">价格变了、新站出现了、测量异常了，我们告诉你</h1></div>
 <div class="two"><section class="card pad rise" style="--i:1"><h2 class="sec">现在就能用</h2><p class="lead">RSS 每天更新价格变动与新收录；每周一自动生成周报页。</p><div style="margin-top:14px;display:flex;gap:10px;flex-wrap:wrap"><a class="btn p" href="%s/feed.xml">RSS 订阅</a><a class="btn o" href="%s/weekly">价格周报</a></div>
 <p class="lead" style="margin-top:14px">想按站、按模型收提醒：登录后在站点页或模型页点"关注"。</p><a class="btn o" style="margin-top:10px" href="%s/api/auth/github/start?return_to=%s/subscribe">用 GitHub 登录 →</a></section>
-<section class="card pad rise" style="--i:2"><h2 class="sec">邮件提醒与周报</h2><div class="notice" style="margin-top:12px">邮件服务正在接入。接通后，关注的站或模型有变化会发邮件；每周一封周报。不会有营销邮件，只发有变化的，一键退订。</div><p class="lead" style="margin-top:12px">等不及可以先发邮件到 <a href="mailto:hello@sinanlab.com?subject=subscribe" style="color:var(--p-ink)">hello@sinanlab.com</a> 写"订阅"，接通那天我们手动加你。</p></section></div>""" % (C, C, C, BASE), "subscribe.html")
+<section class="card pad rise" style="--i:2"><h2 class="sec">邮件周报</h2><p class="lead" style="margin-top:6px">每周一一封：本周价格变动、新收录的站、每个模型说得通的最低实付。只陈述测量，不含推荐；每封都能一键退订。</p><form id="subf" style="margin-top:12px;display:flex;gap:8px;flex-wrap:wrap"><input type="email" id="sube" required placeholder="你的邮箱" autocomplete="email" style="flex:1;min-width:220px;padding:10px 12px;border:1px solid var(--hair);border-radius:10px;font:inherit;font-size:14px"><button class="btn p" type="submit">订阅周报</button></form><div id="subm" class="notice" style="margin-top:12px;display:none"></div><p class="lead" style="margin-top:12px;font-size:13px">想按站、按模型收提醒：用 GitHub 登录 Sinan Compute，在站点页或模型页点"关注"，再到"我的"页面开启邮件提醒。</p></section>
+<script>(function(){var f=document.getElementById("subf"),m=document.getElementById("subm");function say(t){m.style.display="block";m.textContent=t;}var st=new URLSearchParams(location.search).get("s");var MS={confirmed:"订阅已确认，下周一见。",unsubscribed:"已退订，不会再发。",expired:"确认链接已过期，请重新提交邮箱。",invalid:"链接无效。"};if(st&&MS[st])say(MS[st]);f.addEventListener("submit",function(e){e.preventDefault();var em=document.getElementById("sube").value.trim();say("发送中…");fetch("https://compute.sinanlab.com/api/subscribe",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({email:em,lang:document.documentElement.lang==="en"?"en":"zh"})}).then(function(r){return r.json();}).then(function(x){var R={sent:"确认邮件已发出，去邮箱点一下链接就生效。",already:"这个邮箱已经在订阅列表里。",bad_email:"邮箱格式不对。",mail_not_ready:"邮件服务暂未开放。",send_failed:"发送失败，稍后再试。"};say(R[x.state]||R[x.error]||"发送失败，稍后再试。");}).catch(function(){say("网络错误，稍后再试。");});});})();</script></div>""" % (C, C, C, BASE), "subscribe.html")
 
 for fn, title, body in [
-    ("disclosure.html", "返佣披露 · Sinan Lab", u'<div class="rise" style="--i:0;margin-bottom:14px"><div class="eyebrow">返佣披露</div><h1 style="font-size:30px;margin-top:8px">目前：零返佣、零广告、零赞助</h1></div><section class="card pad prose rise" style="--i:1"><p>截至本页最后更新，本站所有页面不含任何返佣链接、广告位或赞助内容，未从任何被测渠道或第三方获得收入。所有"前往站点"链接不带推广参数，只计点击数。</p><h3>若将来接入</h3><p>只会来自上游官方平台，绝不来自任何被测量的中转渠道；含返佣的位置显著标明"广告"并使用 rel=sponsored；排序与判读永不读取返佣字段；每季度在本页公开收入来源占比。返佣总开关在后台，默认关闭，每次开关都记入审计日志。</p><p style="color:var(--ink-3);font-size:13px">最后更新：2026-09-04</p></section>'),
+    ("disclosure.html", "收入透明 · Sinan Lab", u'<div class="rise" style="--i:0;margin-bottom:14px"><div class="eyebrow">收入透明</div><h1 style="font-size:30px;margin-top:8px">目前：零返佣、零广告、零赞助</h1></div><section class="card pad prose rise" style="--i:1"><p>截至本页最后更新，本站所有页面不含任何返佣链接、广告位或赞助内容，未从任何被测渠道或第三方获得收入。所有"前往站点"链接不带推广参数，只计点击数。</p><h3>若将来接入</h3><p>只会来自上游官方平台，绝不来自任何被测量的中转渠道；含返佣的位置显著标明"广告"并使用 rel=sponsored；排序与判读永不读取返佣字段；每季度在本页公开收入来源占比。返佣总开关在后台，默认关闭，每次开关都记入审计日志。</p><p style="color:var(--ink-3);font-size:13px">最后更新：2026-09-04</p></section>'),
     ("privacy.html", "隐私政策 · Sinan Lab", u'<div class="rise" style="--i:0;margin-bottom:14px"><div class="eyebrow">隐私政策</div><h1 style="font-size:30px;margin-top:8px">我们几乎不收集什么</h1></div><section class="card pad prose rise" style="--i:1"><p>所有数据不登录也全部可见；不使用 Cookie 追踪；统计使用无 Cookie 的 Cloudflare Web Analytics。</p><h3>账号（可选）</h3><p>登录只解锁关注、提醒、纠错提交等个人化功能。我们不设密码、不存密码。用 GitHub 登录时，我们保存你的 GitHub 用户编号、用户名、头像地址，以及 GitHub 提供的邮箱（用于将来发提醒；查找时只用邮箱的哈希值）。登录状态存在一个名为 sinan_sid 的 Cookie 里，作用域为 sinanlab.com 及其子域，30 天有效，仅服务器可读。</p><h3>你在站内留下的东西</h3><p>关注列表、提醒设置、你提交的纠错。这些只对你自己和站点维护者可见。想删除账号及全部数据，发邮件到 hello@sinanlab.com，我们在 7 天内处理。</p><h3>邮箱</h3><p>仅用于你订阅或开启的提醒，单独存放、不与浏览数据关联，随时一键退订。</p><h3>出站跳转</h3><p>点击"前往站点"经本站中转，仅按天按站累计点击次数，不记录 IP、浏览器标识或来源页。</p><h3>你的 Key</h3><p>任何"用我的 Key 核实"的功能都在你的浏览器本地运行，Key 不上传、不落库、不经过我们的服务器。</p><h3>统计</h3><p>后台只看无个人信息的计数：每日登录数、注册数、关注数、出站点击数。</p><p style="color:var(--ink-3);font-size:13px">最后更新：2026-09-03 · 联系 hello@sinanlab.com</p></section>'),
     ("disclaimer.html", "免责声明 · Sinan Lab", u'<div class="rise" style="--i:0;margin-bottom:14px"><div class="eyebrow">免责声明</div><h1 style="font-size:30px;margin-top:8px">我们给事实，不给推荐</h1></div><section class="card pad prose rise" style="--i:1"><p>本站所有比率、判读均为基于公开信息的算术结果，不构成对任何渠道的指控，也不构成购买建议；不排除存在本站未收录的更低公开来源。</p><h3>数据时效</h3><p>每条数据均标注抓取时间与快照；渠道价格可能随时变化，以渠道方实时展示为准。</p><h3>第三方渠道</h3><p>本站不运营、不担保任何第三方服务。中转渠道存在日志留存、能力裁剪、限流、关站、余额失效及上游合规等风险，请自行评估。</p><h3>更正</h3><p>数据错误请联系 hello@sinanlab.com；我们公开更正并保留原记录。</p><p style="color:var(--ink-3);font-size:13px">最后更新：2026-09-02</p></section>'),
 ]:
