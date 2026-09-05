@@ -41,7 +41,7 @@ a{color:inherit;text-decoration:none}button{font:inherit;color:inherit}.mono{fon
 header.top{position:sticky;top:0;z-index:20;background:rgba(242,243,249,.82);backdrop-filter:blur(12px);border-bottom:1px solid var(--hair)}
 .bar{display:flex;align-items:center;gap:22px;height:64px}
 .brand{display:flex;align-items:center;gap:11px}.brand .mark{width:36px;height:36px;border-radius:10px;background:#07070B url(/brand/sinanlab-mark.svg) center/28px 28px no-repeat;box-shadow:0 8px 18px -10px rgba(7,7,11,.6);flex:none}
-.hero .lockup{width:480px;max-width:100%;height:auto;display:block;margin:0 0 26px -12px}.brandband{background:#07070B;border-radius:18px;padding:26px 32px;display:flex;align-items:center;gap:24px;flex-wrap:wrap;margin-top:44px}.brandband img{width:480px;max-width:100%;height:auto;display:block}.brandband span{color:#B8A4FA;font-size:13px;letter-spacing:.08em;margin-left:auto}
+.hero .lockup{width:480px;max-width:100%;height:auto;display:block;margin:0 0 26px -12px;border:1px solid rgba(245,245,247,.14);border-radius:16px;position:relative;z-index:3}.brandband{background:#07070B;border-radius:18px;padding:26px 32px;display:flex;align-items:center;gap:24px;flex-wrap:wrap;margin-top:44px}.brandband img{width:480px;max-width:100%;height:auto;display:block}.brandband span{color:#B8A4FA;font-size:13px;letter-spacing:.08em;margin-left:auto}
 .brand b{font-size:17px;font-weight:700;letter-spacing:-.01em;display:block;line-height:1.1}.brand small{display:block;font-size:10.5px;color:var(--ink-3);letter-spacing:.06em;margin-top:2px;white-space:nowrap}
 nav.main{display:flex;gap:4px;margin-left:12px}nav.main a{padding:8px 12px;border-radius:10px;color:var(--ink-2);font-weight:500;font-size:14px;white-space:nowrap}nav.main a:hover{background:var(--card);color:var(--ink)}nav.main a.on{color:var(--ink);background:var(--card);box-shadow:var(--shadow-1)}
 .right{margin-left:auto;display:flex;gap:8px;align-items:center}
@@ -53,7 +53,7 @@ main{padding:22px 0 80px}
 h1,h2,h3{margin:0;letter-spacing:-.01em}h2.sec{font-size:22px;font-weight:700}.lead{color:var(--ink-2);font-size:14px;margin:6px 0 0;max-width:760px}
 .eyebrow{font-family:var(--mono);font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--p)}
 /* hero */
-.hero{min-height:560px;border-radius:26px;overflow:hidden;position:relative;background:radial-gradient(600px 300px at 12% 0%,rgba(110,86,245,.28),transparent 60%),#07070B;color:#fff;box-shadow:0 2px 6px rgba(20,22,50,.1),0 30px 60px -24px rgba(10,10,40,.7);isolation:isolate}
+.hero{min-height:560px;border-radius:26px;overflow:hidden;position:relative;background:radial-gradient(700px 340px at 80% 100%,rgba(110,86,245,.26),transparent 60%),#07070B;color:#fff;box-shadow:0 2px 6px rgba(20,22,50,.1),0 30px 60px -24px rgba(10,10,40,.7);isolation:isolate}
 .hero canvas{position:absolute;inset:0;width:100%;height:100%;display:block}.hero .stars{pointer-events:none}.hero #gl{cursor:grab;z-index:1}
 .hero .scrim{position:absolute;inset:0;background:linear-gradient(100deg,rgba(7,7,11,.78) 0%,rgba(7,7,11,.4) 45%,rgba(7,7,11,0) 70%);pointer-events:none}
 .hero .txt{position:relative;z-index:2;max-width:680px;padding:56px 52px 52px}
